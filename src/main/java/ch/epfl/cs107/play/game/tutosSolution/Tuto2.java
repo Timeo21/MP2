@@ -44,7 +44,7 @@ public class Tuto2 extends AreaGame {
 		 
 		  Tuto2Area area = (Tuto2Area)setCurrentArea(areaKey, true);
 		  DiscreteCoordinates coords = area.getPlayerSpawnPosition();
-		  player = new GhostPlayer(area, Orientation.DOWN, coords,"ghost.1");
+		  player = new GhostPlayer(area, Orientation.DOWN, coords,"max");
 		  player.enterArea(area, coords);
 	      player.centerCamera();
 		 

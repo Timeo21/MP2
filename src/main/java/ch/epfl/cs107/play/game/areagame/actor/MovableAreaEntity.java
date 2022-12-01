@@ -200,7 +200,7 @@ public abstract class MovableAreaEntity extends AreaEntity {
      * Indicate if a displacement is occurring
      * @return (boolean)
      */
-    protected boolean isDisplacementOccurs(){
+    protected boolean isInDisplacement(){
         return displacementOccurs;
     }
 

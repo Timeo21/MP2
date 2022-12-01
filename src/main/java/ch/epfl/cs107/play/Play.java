@@ -2,6 +2,8 @@ package ch.epfl.cs107.play;
 
 import ch.epfl.cs107.play.game.Game;
 import ch.epfl.cs107.play.game.areagame.io.ResourcePath;
+import ch.epfl.cs107.play.game.icrogue.ICRogue;
+import ch.epfl.cs107.play.game.tutosSolution.Tuto1;
 import ch.epfl.cs107.play.game.tutosSolution.Tuto2;
 import ch.epfl.cs107.play.io.DefaultFileSystem;
 import ch.epfl.cs107.play.io.FileSystem;
@@ -14,10 +16,13 @@ import ch.epfl.cs107.play.window.swing.SwingWindow;
  */
 public class Play {
 
+	private static int size = 1024;
+	// default : 550
+
 	/** One second in nanosecond */
     private static final float ONE_SEC = 1E9f;
-	public static final int WINDOW_HEIGHT = 550;
-	public static final int WINDOW_WIDTH = 550;
+	public static final int WINDOW_HEIGHT = size;
+	public static final int WINDOW_WIDTH = size;
 
 	/**
 	 * Main entry point.
@@ -30,7 +35,7 @@ public class Play {
 
         // Create a demo game and initialize corresponding texts
 
-		final Game game = new Tuto2();
+		final Game game = new ICRogue();
 
 		// Use Swing display
 		final Window window = new SwingWindow(game.getTitle(), fileSystem, WINDOW_WIDTH, WINDOW_HEIGHT);

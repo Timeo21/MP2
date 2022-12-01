@@ -68,7 +68,7 @@ public class GhostPlayer extends MovableAreaEntity {
 	     */
 	    private void moveIfPressed(Orientation orientation, Button b){
 	        if(b.isDown()) {
-	            if (!isDisplacementOccurs()) {
+	            if (!isInDisplacement()) {
 	                orientate(orientation);
 	                move(MOVE_DURATION);
 	            }
