@@ -19,9 +19,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class ICRoguePlayer extends ICRogueActor implements Interactor {
-    private Sprite[][] sprite;
-    private Sprite[] sprites = new Sprite[4];
-    private Animation[] animations;
+    private Sprite[] idleSprites = new Sprite[4];
+    private Animation[] walkAnimations;
+    private Animation[] staffAnimations;
     private Orientation orientation;
     private Area area;
     private ICRoguePlayerInteractionHandler playerInteractionHandler;
@@ -40,24 +40,24 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
         this.playerInteractionHandler = new ICRoguePlayerInteractionHandler();
         this.hasStaff = false;
 
-        sprite = Sprite.extractSprites("zelda/player",4, 0.75f, 1.5f, this , 16, 32,new Vector(0.15f, -0.15f),
-                 new Orientation[] {Orientation.DOWN , Orientation.RIGHT , Orientation.UP, Orientation.LEFT});
+        Sprite[][] animationSprites = Sprite.extractSprites("zelda/player", 4, 0.75f, 1.5f, this, 16, 32, new Vector(0.15f, -0.15f),
+                new Orientation[]{Orientation.DOWN, Orientation.RIGHT, Orientation.UP, Orientation.LEFT});
+        walkAnimations = Animation.createAnimations(MOVE_DURATION/2, animationSprites);
 
-        animations = Animation.createAnimations(MOVE_DURATION/2,sprite);
+        animationSprites = Sprite.extractSprites("zelda/player.staff_water", 4, 0.75f, 1.5f, this, 16, 32, new Vector(0.15f, -0.15f),
+                new Orientation[]{Orientation.DOWN, Orientation.RIGHT, Orientation.UP, Orientation.LEFT});
 
-        /*
-        sprites[0] = new Sprite(spriteName,.75f,1.5f,this, new RegionOfInterest(0,0,16,32),new Vector(0.15f, -0.15f));
-        sprites[1] = new Sprite(spriteName,.75f,1.5f,this, new RegionOfInterest(0,32,16,32),new Vector(0.15f, -0.15f));
-        sprites[2] = new Sprite(spriteName,.75f,1.5f,this, new RegionOfInterest(0,64,16,32),new Vector(0.15f, -0.15f));
-        sprites[3] = new Sprite(spriteName,.75f,1.5f,this, new RegionOfInterest(0,96,16,32),new Vector(0.15f, -0.15f));
 
-         */
+        idleSprites[0] = new Sprite(spriteName,.75f,1.5f,this, new RegionOfInterest(0,0,16,32),new Vector(0.15f, -0.15f));
+        idleSprites[1] = new Sprite(spriteName,.75f,1.5f,this, new RegionOfInterest(0,32,16,32),new Vector(0.15f, -0.15f));
+        idleSprites[2] = new Sprite(spriteName,.75f,1.5f,this, new RegionOfInterest(0,64,16,32),new Vector(0.15f, -0.15f));
+        idleSprites[3] = new Sprite(spriteName,.75f,1.5f,this, new RegionOfInterest(0,96,16,32),new Vector(0.15f, -0.15f));
+
 /*
         sprites[0] = new Sprite("mew.fixed",1f,1f,this,new RegionOfInterest(0,0,16,21),new Vector(0.15f,0.15f));
         sprites[3] = new Sprite("mew.fixed",1f,1f,this,new RegionOfInterest(16,0,16,21),new Vector(0.15f,0.15f));
         sprites[2] = new Sprite("mew.fixed",1f,1f,this,new RegionOfInterest(32,0,16,21),new Vector(0.15f,0.15f));
         sprites[1] = new Sprite("mew.fixed",1f,1f,this,new RegionOfInterest(48,0,16,21),new Vector(0.15f,0.15f));
-
  */
 
 
@@ -66,7 +66,7 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
 
     @Override
     public void update(float deltaTime){
-        for (Animation animation : animations) {
+        for (Animation animation : walkAnimations) {
             animation.update(deltaTime);
         }
         Keyboard keyboard= getOwnerArea().getKeyboard();
@@ -125,19 +125,20 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
 
     @Override
     public void draw(Canvas canvas) {
-        /*
-        switch (orientation ){
-            case UP -> sprites[2].draw(canvas);
-            case DOWN -> sprites[0].draw(canvas);
-            case RIGHT -> sprites[1].draw(canvas);
-            case LEFT -> sprites[3].draw(canvas);
-        }
-         */
-        switch (orientation ){
-            case UP -> animations[0].draw(canvas);
-            case DOWN -> animations[2].draw(canvas);
-            case RIGHT -> animations[1].draw(canvas);
-            case LEFT -> animations[3].draw(canvas);
+        if (isInDisplacement()){
+            switch (orientation ){
+                case UP -> walkAnimations[0].draw(canvas);
+                case DOWN -> walkAnimations[2].draw(canvas);
+                case RIGHT -> walkAnimations[1].draw(canvas);
+                case LEFT -> walkAnimations[3].draw(canvas);
+            }
+        } else {
+            switch (orientation ){
+                case UP -> idleSprites[2].draw(canvas);
+                case DOWN -> idleSprites[0].draw(canvas);
+                case RIGHT -> idleSprites[1].draw(canvas);
+                case LEFT -> idleSprites[3].draw(canvas);
+            }
         }
 
     }
@@ -204,6 +205,9 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
         public void interactWith(Staff staff, boolean isCellInteraction) {
             hasStaff=true;
             area.unregisterActor(staff);
+        }
+        public void interactWith(Connector connector, boolean isCellInteraction) {
+            System.out.println("Interacte with connector "+connector.getOrientation().toString());
         }
     }
 }

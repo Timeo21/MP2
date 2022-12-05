@@ -2,6 +2,7 @@ package ch.epfl.cs107.play.game.icrogue.handler;
 
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.game.icrogue.ICRogueBehavior;
+import ch.epfl.cs107.play.game.icrogue.actor.Connector;
 import ch.epfl.cs107.play.game.icrogue.actor.ICRoguePlayer;
 import ch.epfl.cs107.play.game.icrogue.actor.items.Key;
 import ch.epfl.cs107.play.game.icrogue.actor.items.Staff;
@@ -18,6 +19,8 @@ public interface ICRogueInteractionHandler extends AreaInteractionVisitor {
     default void interactWith(Staff staff, boolean isCellInteraction) {
     }
     default void interactWith(FireBall fireBall, boolean isCellInteraction) {
+    }
+    default void interactWith(Connector connector, boolean isCellInteraction) {
     }
 
 }
