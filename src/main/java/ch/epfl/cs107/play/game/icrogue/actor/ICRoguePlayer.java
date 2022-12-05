@@ -73,6 +73,10 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
         moveIfPressed(Orientation.UP, keyboard.get(Keyboard.UP));
         moveIfPressed(Orientation.RIGHT, keyboard.get(Keyboard.RIGHT));
         moveIfPressed(Orientation.DOWN, keyboard.get(Keyboard.DOWN));
+        fireBallIfPressed(keyboard.get(Keyboard.X));
+        if (keyboard.get(Keyboard.O).isPressed()) cheatIfPressed(1);
+        if (keyboard.get(Keyboard.L).isPressed()) cheatIfPressed(2);
+        if (keyboard.get(Keyboard.T).isPressed()) cheatIfPressed(3);
 
         super.update(deltaTime);
     }
