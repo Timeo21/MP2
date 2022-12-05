@@ -44,6 +44,7 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
                  new Orientation[] {Orientation.DOWN , Orientation.RIGHT , Orientation.UP, Orientation.LEFT});
 
         animations = Animation.createAnimations(MOVE_DURATION/2,sprite);
+
         /*
         sprites[0] = new Sprite(spriteName,.75f,1.5f,this, new RegionOfInterest(0,0,16,32),new Vector(0.15f, -0.15f));
         sprites[1] = new Sprite(spriteName,.75f,1.5f,this, new RegionOfInterest(0,32,16,32),new Vector(0.15f, -0.15f));
