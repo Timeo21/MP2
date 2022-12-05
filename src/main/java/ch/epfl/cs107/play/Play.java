@@ -23,6 +23,7 @@ public class Play {
     private static final float ONE_SEC = 1E9f;
 	public static final int WINDOW_HEIGHT = size;
 	public static final int WINDOW_WIDTH = size;
+	private static Game currentGame;
 
 	/**
 	 * Main entry point.
@@ -36,6 +37,8 @@ public class Play {
         // Create a demo game and initialize corresponding texts
 
 		final Game game = new ICRogue();
+		currentGame = game;
+
 
 		// Use Swing display
 		final Window window = new SwingWindow(game.getTitle(), fileSystem, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -84,4 +87,7 @@ public class Play {
 		}
 	}
 
+	public Game getGame(){
+		return currentGame;
+	}
 }

@@ -2,7 +2,9 @@ package ch.epfl.cs107.play.game.icrogue;
 
 import ch.epfl.cs107.play.game.areagame.AreaBehavior;
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
+import ch.epfl.cs107.play.game.areagame.actor.Interactor;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
+import ch.epfl.cs107.play.game.icrogue.handler.ICRogueInteractionHandler;
 import ch.epfl.cs107.play.window.Window;
 
 public class ICRogueBehavior extends AreaBehavior {
@@ -49,6 +51,17 @@ public class ICRogueBehavior extends AreaBehavior {
         }
     }
 
+
+    @Override
+    public void cellInteractionOf(Interactor interactor) {
+        super.cellInteractionOf(interactor);
+    }
+
+    @Override
+    public void viewInteractionOf(Interactor interactor) {
+        super.viewInteractionOf(interactor);
+    }
+
     public class ICRogueCell extends Cell{
 
         private final ICRogueCellType type;
@@ -71,6 +84,11 @@ public class ICRogueBehavior extends AreaBehavior {
 
         @Override
         protected boolean canEnter(Interactable entity) {
+            if (entity.takeCellSpace()){
+                for (Interactable onCell : entities){
+                    if(onCell.takeCellSpace()) return false;
+                }
+            }
             return type.isWalkable;
         }
 
@@ -81,13 +99,16 @@ public class ICRogueBehavior extends AreaBehavior {
 
         @Override
         public boolean isViewInteractable() {
-            return false;
+            return true;
         }
 
         @Override
         public void acceptInteraction(AreaInteractionVisitor v, boolean isCellInteraction) {
-
+            ((ICRogueInteractionHandler) v).interactWith(this,isCellInteraction);
         }
 
+        public ICRogueCellType getCellType(){
+            return this.type;
+        }
     }
 }
