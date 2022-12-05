@@ -23,10 +23,13 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
     private Animation[] walkAnimations;
     private Animation[] staffAnimations;
     private Orientation orientation;
+    private boolean fireBalling;
     private Area area;
     private ICRoguePlayerInteractionHandler playerInteractionHandler;
     private boolean hasStaff;
     private final static int MOVE_DURATION = 8;
+
+    int a = 0;
 
     /**
      * @param area        (Area): Owner area. Not null
@@ -42,16 +45,17 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
 
         Sprite[][] animationSprites = Sprite.extractSprites("zelda/player", 4, 0.75f, 1.5f, this, 16, 32, new Vector(0.15f, -0.15f),
                 new Orientation[]{Orientation.DOWN, Orientation.RIGHT, Orientation.UP, Orientation.LEFT});
+
         walkAnimations = Animation.createAnimations(MOVE_DURATION/2, animationSprites);
 
-        animationSprites = Sprite.extractSprites("zelda/player.staff_water", 4, 0.75f, 1.5f, this, 16, 32, new Vector(0.15f, -0.15f),
+        animationSprites = Sprite.extractSprites("zelda/player.staff_water", 8, 0.75f, 1.5f, this, 16, 32, new Vector(0.15f, -0.15f),
                 new Orientation[]{Orientation.DOWN, Orientation.RIGHT, Orientation.UP, Orientation.LEFT});
 
+        staffAnimations = Animation.createAnimations(8,animationSprites,false);
 
-        idleSprites[0] = new Sprite(spriteName,.75f,1.5f,this, new RegionOfInterest(0,0,16,32),new Vector(0.15f, -0.15f));
-        idleSprites[1] = new Sprite(spriteName,.75f,1.5f,this, new RegionOfInterest(0,32,16,32),new Vector(0.15f, -0.15f));
-        idleSprites[2] = new Sprite(spriteName,.75f,1.5f,this, new RegionOfInterest(0,64,16,32),new Vector(0.15f, -0.15f));
-        idleSprites[3] = new Sprite(spriteName,.75f,1.5f,this, new RegionOfInterest(0,96,16,32),new Vector(0.15f, -0.15f));
+        for (int i = 0; i < 4; i++) {
+            idleSprites[i] = new Sprite(spriteName,.75f,1.5f,this, new RegionOfInterest(0,i*32,16,32),new Vector(0.15f, -0.15f));
+        }
 
 /*
         sprites[0] = new Sprite("mew.fixed",1f,1f,this,new RegionOfInterest(0,0,16,21),new Vector(0.15f,0.15f));
@@ -67,6 +71,9 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
     @Override
     public void update(float deltaTime){
         for (Animation animation : walkAnimations) {
+            animation.update(deltaTime);
+        }
+        for (Animation animation : staffAnimations) {
             animation.update(deltaTime);
         }
         Keyboard keyboard= getOwnerArea().getKeyboard();
@@ -125,6 +132,7 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
 
     @Override
     public void draw(Canvas canvas) {
+
         if (isInDisplacement()){
             switch (orientation ){
                 case UP -> walkAnimations[0].draw(canvas);

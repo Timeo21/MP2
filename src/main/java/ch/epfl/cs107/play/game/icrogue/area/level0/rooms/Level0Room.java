@@ -39,9 +39,9 @@ public class Level0Room extends ICRogueRoom {
 
     public enum Level0Connectors implements ConnectorInRoom{
         E(new DiscreteCoordinates(9, 4), new DiscreteCoordinates(8, 5), Orientation.RIGHT),
-        N(new DiscreteCoordinates(4, 0), new DiscreteCoordinates(5, 8), Orientation.UP),
-        W(new DiscreteCoordinates(0, 4), new DiscreteCoordinates(1, 5), Orientation.RIGHT),
-        S(new DiscreteCoordinates(4, 9), new DiscreteCoordinates(5, 1), Orientation.DOWN);
+        N(new DiscreteCoordinates(4, 9), new DiscreteCoordinates(5, 8), Orientation.UP),
+        W(new DiscreteCoordinates(0, 4), new DiscreteCoordinates(1, 5), Orientation.LEFT),
+        S(new DiscreteCoordinates(4, 0), new DiscreteCoordinates(5, 1), Orientation.DOWN);
 
         private DiscreteCoordinates destination;
 
@@ -59,7 +59,7 @@ public class Level0Room extends ICRogueRoom {
             return destination;
         }
         public static List<Orientation> getAllConnectorsOrientation(){
-            return List.of(Orientation.LEFT,Orientation.DOWN,Orientation.RIGHT,Orientation.UP);
+            return List.of(Orientation.RIGHT,Orientation.UP,Orientation.LEFT,Orientation.DOWN);
         }
         public static List<DiscreteCoordinates> getAllConnectorsPosition(){
             return List.of(new DiscreteCoordinates(9, 4),new DiscreteCoordinates(4, 9),new DiscreteCoordinates(0, 4),new DiscreteCoordinates(4, 0));

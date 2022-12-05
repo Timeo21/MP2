@@ -3,6 +3,8 @@ package ch.epfl.cs107.play.game.icrogue.actor;
 import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
+import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
+import ch.epfl.cs107.play.game.icrogue.handler.ICRogueInteractionHandler;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Vector;
 import ch.epfl.cs107.play.window.Canvas;
@@ -33,10 +35,11 @@ public class Connector extends ICRogueActor{
         this.destinationAreaName = destinationAreaName;
         this.destinationCoordinates = destinationCoordinates;
         this.takeSpace = true;
+        orientation = orientation.opposite();
         sprites[0] = null;
         sprites[1] = new Sprite("icrogue/door_"+orientation.ordinal(),(orientation.ordinal()+1)%2+1, orientation.ordinal()%2+1, this);
-        sprites[2] = new Sprite("icrogue/lockedDoor_"+orientation.ordinal(),(orientation.ordinal()+1)%2+1, orientation.ordinal()%2+1, this);
-        sprites[3] = new Sprite("icrogue/invisibleDoor_"+orientation.ordinal(),(orientation.ordinal()+1)%2+1, orientation.ordinal()%2+1, this);
+        sprites[2] = new Sprite("icrogue/lockedDoor_"+orientation.ordinal(),(orientation.opposite().ordinal()+1)%2+1, orientation.ordinal()%2+1, this);
+        sprites[3] = new Sprite("icrogue/invisibleDoor_"+orientation.ordinal(),(orientation.opposite().ordinal()+1)%2+1, orientation.ordinal()%2+1, this);
     }
 
     @Override
@@ -77,5 +80,9 @@ public class Connector extends ICRogueActor{
         } else if (stats.equals(ConnectorStats.OPEN)) {
             setStats(ConnectorStats.CLOSE);
         }
+    }
+    @Override
+    public void acceptInteraction(AreaInteractionVisitor v, boolean isCellInteraction) {
+        ((ICRogueInteractionHandler) v).interactWith(this,isCellInteraction);
     }
 }
