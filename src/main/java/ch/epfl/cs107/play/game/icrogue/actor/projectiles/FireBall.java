@@ -1,6 +1,5 @@
 package ch.epfl.cs107.play.game.icrogue.actor.projectiles;
 
-import ch.epfl.cs107.play.game.actor.Actor;
 import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.*;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
@@ -34,7 +33,6 @@ public class FireBall extends Projectile implements Consumable, Interactor{
 
         this.area = area;
         this.orientation = orientation;
-        this.coordinates = position;
         interactionHandler = new FireBallInteractionHandler();
         fireBall = this;
         this.isConsumed = false;

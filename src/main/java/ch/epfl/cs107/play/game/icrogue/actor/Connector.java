@@ -1,6 +1,7 @@
 package ch.epfl.cs107.play.game.icrogue.actor;
 
 import ch.epfl.cs107.play.game.areagame.Area;
+import ch.epfl.cs107.play.game.areagame.actor.AreaEntity;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
@@ -11,7 +12,7 @@ import ch.epfl.cs107.play.window.Canvas;
 
 import java.util.List;
 
-public class Connector extends ICRogueActor{
+public class Connector extends AreaEntity {
     private static final int NO_KEY_ID = 0;
     private int keyID;
     private ConnectorStats stats;
@@ -48,6 +49,11 @@ public class Connector extends ICRogueActor{
     }
 
     @Override
+    public boolean isCellInteractable() {
+        return true;
+    }
+
+    @Override
     public boolean isViewInteractable() {
         return true;
     }
@@ -57,7 +63,6 @@ public class Connector extends ICRogueActor{
         if (!stats.equals(ConnectorStats.OPEN)){
             sprites[stats.ordinal()].draw(canvas);
         }
-        super.draw(canvas);
     }
 
     @Override
