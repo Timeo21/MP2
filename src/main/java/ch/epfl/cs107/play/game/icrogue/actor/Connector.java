@@ -68,6 +68,9 @@ public class Connector extends AreaEntity {
     public int getKeyID(){
         return keyID;
     }
+    public void setKeyID(int keyID){
+        this.keyID = keyID;
+    }
 
     @Override
     public List<DiscreteCoordinates> getCurrentCells() {

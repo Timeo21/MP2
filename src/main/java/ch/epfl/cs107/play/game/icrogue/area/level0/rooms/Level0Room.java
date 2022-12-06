@@ -20,11 +20,6 @@ public class Level0Room extends ICRogueRoom {
     }
 
     @Override
-    public String getTitle() {
-        return "icrogue/level0"+ roomCoordinates.x+ roomCoordinates.y;
-    }
-
-    @Override
     protected void createArea() {
         registerActor(new Background(this,"icrogue/Level0Room"));
         new Staff(this, Orientation.DOWN,new DiscreteCoordinates(4,3));

@@ -43,6 +43,11 @@ public abstract class ICRogueRoom extends Area {
         }
     }
 
+    @Override
+    public String getTitle() {
+        return "icrogue/level0"+ roomCoordinates.x+ roomCoordinates.y;
+    }
+
     /**
      * @return (float): camera scale factor, assume it is the same in x and y direction
      */
@@ -93,5 +98,8 @@ public abstract class ICRogueRoom extends Area {
                 }
                 break;
         }
+    }
+    protected List<Connector> getConnector(){
+        return connectors;
     }
 }
