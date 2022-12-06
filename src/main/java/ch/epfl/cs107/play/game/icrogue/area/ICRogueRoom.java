@@ -27,15 +27,10 @@ public abstract class ICRogueRoom extends Area {
         this.behavoirName = behaviorName;
         this.positions = connectorsCoordinates;
         this.orientations = orientations;
-        connectors.add(new Connector(this, positions.get(0),orientations.get(0), Connector.ConnectorStats.INVISIBLE,"level0", Level0Room.Level0Connectors.W.getDestination()));
-        connectors.add(new Connector(this, positions.get(1),orientations.get(1), Connector.ConnectorStats.INVISIBLE,"level0", Level0Room.Level0Connectors.S.getDestination()));
-        connectors.add(new Connector(this, positions.get(2),orientations.get(2), Connector.ConnectorStats.INVISIBLE,"level0", Level0Room.Level0Connectors.E.getDestination()));
-        connectors.add(new Connector(this, positions.get(3),orientations.get(3), Connector.ConnectorStats.INVISIBLE,"level0", Level0Room.Level0Connectors.N.getDestination()));
-        /*
-
-        new Connector(this, positions.get(2),orientations.get(2), Connector.ConnectorStats.CLOSE,"level0", Level0Room.Level0Connectors.E.getDestination());
-        new Connector(this, positions.get(3),orientations.get(3), Connector.ConnectorStats.OPEN,"level0", Level0Room.Level0Connectors.N.getDestination());
-        */
+        connectors.add(new Connector(this, positions.get(0),orientations.get(0), Connector.ConnectorStats.INVISIBLE,"", Level0Room.Level0Connectors.W.getDestination()));
+        connectors.add(new Connector(this, positions.get(1),orientations.get(1), Connector.ConnectorStats.INVISIBLE,"", Level0Room.Level0Connectors.S.getDestination()));
+        connectors.add(new Connector(this, positions.get(2),orientations.get(2), Connector.ConnectorStats.INVISIBLE,"", Level0Room.Level0Connectors.E.getDestination()));
+        connectors.add(new Connector(this, positions.get(3),orientations.get(3), Connector.ConnectorStats.INVISIBLE,"", Level0Room.Level0Connectors.N.getDestination()));
     }
     protected void createArea(){
         for (Connector connector : connectors) {

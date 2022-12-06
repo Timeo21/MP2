@@ -22,8 +22,6 @@ public class Level0Room extends ICRogueRoom {
     @Override
     protected void createArea() {
         registerActor(new Background(this,"icrogue/Level0Room"));
-        new Staff(this, Orientation.DOWN,new DiscreteCoordinates(4,3));
-        new Key(this, Orientation.DOWN,new DiscreteCoordinates(6,3),1);
         super.createArea();
     }
 

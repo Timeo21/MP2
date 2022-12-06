@@ -10,10 +10,15 @@ import ch.epfl.cs107.play.math.DiscreteCoordinates;
 public class Level0 extends Level {
     private final int KEY_ID1 = 1;
     private final int BOSS_KEY_ID = 2;
-    public Level0(int height, int width, DiscreteCoordinates startRoomCoords, ICRogue icRogue) {
-        super(height, width, startRoomCoords, icRogue);
+    public Level0(int height, int width, DiscreteCoordinates startRoomCoords) {
+        super(height, width, startRoomCoords);
+    }
+
+    @Override
+    protected void generateFixedMap() {
         generateMap1();
     }
+
     private void generateMap1(){
         DiscreteCoordinates room00 = new DiscreteCoordinates(0,0);
         setRoom(room00, new Level0KeyRoom(room00,KEY_ID1));
