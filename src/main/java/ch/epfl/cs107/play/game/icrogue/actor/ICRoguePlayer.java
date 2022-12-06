@@ -117,7 +117,9 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
     private void fireBallIfPressed(Button button){
         if(button.isPressed() && hasStaff && !fireBalling){
             fireBalling = true;
-            new FireBall(getOwnerArea(),orientation,getCurrentMainCellCoordinates());
+            if (isInDisplacement()){
+                new FireBall(getOwnerArea(),orientation,getCurrentMainCellCoordinates().jump(orientation.toVector()));
+            } else new FireBall(getOwnerArea(),orientation,getCurrentMainCellCoordinates());
         }
     }
 
