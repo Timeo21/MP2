@@ -8,6 +8,7 @@ import ch.epfl.cs107.play.game.icrogue.actor.Connector;
 import ch.epfl.cs107.play.game.icrogue.area.level0.rooms.Level0Room;
 import ch.epfl.cs107.play.io.FileSystem;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
+import ch.epfl.cs107.play.window.Keyboard;
 import ch.epfl.cs107.play.window.Window;
 
 import java.util.ArrayList;
@@ -65,9 +66,32 @@ public abstract class ICRogueRoom extends Area {
 
     @Override
     public void update(float deltaTime) {
+        Keyboard keyboard = this.getKeyboard();
+
+        if (keyboard.get(Keyboard.O).isPressed()) cheatIfPressed(1);
+        if (keyboard.get(Keyboard.L).isPressed()) cheatIfPressed(2);
+        if (keyboard.get(Keyboard.T).isPressed()) cheatIfPressed(3);
+
         super.update(deltaTime);
     }
-    public List<Connector> getConnectors(){
-        return connectors;
+
+
+    private void cheatIfPressed(int cheatCode){
+        switch (cheatCode){
+            case 1:
+                for (Connector connector: connectors){
+                    connector.setStats(Connector.ConnectorStats.OPEN);
+                }
+                break;
+            case 2:
+                Connector connector0 = connectors.get(2);
+                connector0.setStats(Connector.ConnectorStats.LOCKED,1);
+                break;
+            case 3:
+                for (Connector connector: connectors){
+                    connector.switchDoor();
+                }
+                break;
+        }
     }
 }

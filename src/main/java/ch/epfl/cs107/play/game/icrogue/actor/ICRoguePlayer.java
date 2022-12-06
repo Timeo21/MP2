@@ -44,33 +44,29 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
         this.playerInteractionHandler = new ICRoguePlayerInteractionHandler();
         this.hasStaff = false;
 
+        // Walking Animations
         Sprite[][] animationSprites = Sprite.extractSprites("zelda/player", 4, 0.75f, 1.5f, this, 16, 32, new Vector(0.15f, -0.15f),
                 new Orientation[]{Orientation.DOWN, Orientation.RIGHT, Orientation.UP, Orientation.LEFT});
 
         walkAnimations = Animation.createAnimations(MOVE_DURATION/2, animationSprites);
 
+        // Using Staff Animations
         animationSprites = Sprite.extractSprites("zelda/player.staff_water", 4, 1.5f, 1.5f, this, 32, 32,new Vector(-0.20f, -0.15f),
                 new Orientation[]{Orientation.DOWN, Orientation.UP, Orientation.RIGHT, Orientation.LEFT});
 
         staffAnimations = Animation.createAnimations(2,animationSprites);
 
+        // Idle sprite
         for (int i = 0; i < 4; i++) {
             idleSprites[i] = new Sprite(spriteName,.75f,1.5f,this, new RegionOfInterest(0,i*32,16,32),new Vector(0.15f, -0.15f));
         }
-
-/*
-        sprites[0] = new Sprite("mew.fixed",1f,1f,this,new RegionOfInterest(0,0,16,21),new Vector(0.15f,0.15f));
-        sprites[3] = new Sprite("mew.fixed",1f,1f,this,new RegionOfInterest(16,0,16,21),new Vector(0.15f,0.15f));
-        sprites[2] = new Sprite("mew.fixed",1f,1f,this,new RegionOfInterest(32,0,16,21),new Vector(0.15f,0.15f));
-        sprites[1] = new Sprite("mew.fixed",1f,1f,this,new RegionOfInterest(48,0,16,21),new Vector(0.15f,0.15f));
- */
-
 
         resetMotion();
     }
 
     @Override
     public void update(float deltaTime) {
+        // Shooting fireball cooldown
         if (fireBalling){
             if (cooldown > 10){
                 fireBalling = false;
@@ -79,21 +75,20 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
                 cooldown++;
             }
         }
+
         for (Animation animation : walkAnimations) {
             animation.update(deltaTime);
         }
         for (Animation animation : staffAnimations) {
             animation.update(deltaTime);
         }
+
         Keyboard keyboard= getOwnerArea().getKeyboard();
         moveIfPressed(Orientation.LEFT, keyboard.get(Keyboard.LEFT));
         moveIfPressed(Orientation.UP, keyboard.get(Keyboard.UP));
         moveIfPressed(Orientation.RIGHT, keyboard.get(Keyboard.RIGHT));
         moveIfPressed(Orientation.DOWN, keyboard.get(Keyboard.DOWN));
         fireBallIfPressed(keyboard.get(Keyboard.X));
-        if (keyboard.get(Keyboard.O).isPressed()) cheatIfPressed(1);
-        if (keyboard.get(Keyboard.L).isPressed()) cheatIfPressed(2);
-        if (keyboard.get(Keyboard.T).isPressed()) cheatIfPressed(3);
 
         super.update(deltaTime);
     }
@@ -115,30 +110,13 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
     }
 
     private void fireBallIfPressed(Button button){
+        // Press X key, has the staff and is not on cooldown
         if(button.isPressed() && hasStaff && !fireBalling){
             fireBalling = true;
+            //if moving spawning the fireball on case forward to avoid setting his back on fire
             if (isInDisplacement()){
                 new FireBall(getOwnerArea(),orientation,getCurrentMainCellCoordinates().jump(orientation.toVector()));
             } else new FireBall(getOwnerArea(),orientation,getCurrentMainCellCoordinates());
-        }
-    }
-
-    private void cheatIfPressed(int cheatCode){
-        switch (cheatCode){
-            case 1:
-                for (Connector connector: ((Level0Room)area).getConnectors()){
-                    connector.setStats(Connector.ConnectorStats.OPEN);
-            }
-                break;
-            case 2:
-                Connector connector0 = ((Level0Room)area).getConnectors().get(2);
-                connector0.setStats(Connector.ConnectorStats.LOCKED,1);
-                break;
-            case 3:
-                for (Connector connector: ((Level0Room)area).getConnectors()){
-                    connector.switchDoor();
-                }
-                break;
         }
     }
     @Override
@@ -165,7 +143,6 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
                 case LEFT -> idleSprites[3].draw(canvas);
             }
         }
-
     }
 
     public void enterArea(Area area, DiscreteCoordinates coordinates){
@@ -232,7 +209,13 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
             area.unregisterActor(staff);
         }
         public void interactWith(Connector connector, boolean isCellInteraction) {
-            System.out.println("Interacte with connector "+connector.getOrientation().toString());
+            if (connector.takeCellSpace()){
+                System.out.println("Interacte with connector "+connector.getOrientation().toString()+"\n Destination "+connector.destinationCoordinates);
+            } else {
+                ICRoguePlayer.this.leaveArea();
+                ICRoguePlayer.this.enterArea(area,connector.destinationCoordinates);
+            }
+
         }
     }
 }
