@@ -55,7 +55,7 @@ public class Connector extends AreaEntity {
 
     @Override
     public boolean isViewInteractable() {
-        return true;
+        return stats.equals(ConnectorStats.LOCKED);
     }
 
     @Override
@@ -63,6 +63,10 @@ public class Connector extends AreaEntity {
         if (!stats.equals(ConnectorStats.OPEN)){
             sprites[stats.ordinal()].draw(canvas);
         }
+    }
+
+    public int getKeyID(){
+        return keyID;
     }
 
     @Override

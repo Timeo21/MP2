@@ -4,6 +4,7 @@ import ch.epfl.cs107.play.game.actor.Graphics;
 import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.*;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
+import ch.epfl.cs107.play.game.icrogue.actor.items.Item;
 import ch.epfl.cs107.play.game.icrogue.actor.items.Key;
 import ch.epfl.cs107.play.game.icrogue.actor.items.Staff;
 import ch.epfl.cs107.play.game.icrogue.actor.projectiles.FireBall;
@@ -16,6 +17,7 @@ import ch.epfl.cs107.play.window.Button;
 import ch.epfl.cs107.play.window.Canvas;
 import ch.epfl.cs107.play.window.Keyboard;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
     private ICRoguePlayerInteractionHandler playerInteractionHandler;
     private boolean hasStaff;
     private final static int MOVE_DURATION = 8;
+    private List<Key> inventory = new ArrayList<>();
 
     int cooldown = 0;
 
@@ -151,7 +154,6 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
         setCurrentPosition(coordinates.toVector());
         resetMotion();
     }
-
     @Override
     public List<DiscreteCoordinates> getCurrentCells() {
         return Collections.singletonList(getCurrentMainCellCoordinates());
@@ -181,9 +183,6 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
         ((ICRogueInteractionHandler) v).interactWith(this,isCellInteraction);
     }
 
-
-
-
     @Override
     public boolean wantsCellInteraction() {
         return true;
@@ -200,20 +199,35 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
         other.acceptInteraction(playerInteractionHandler,isCellInteraction);
     }
 
+    @Override
+    public boolean changePosition(DiscreteCoordinates newPosition) {
+        return super.changePosition(newPosition);
+    }
+
     public class ICRoguePlayerInteractionHandler implements ICRogueInteractionHandler{
         public void interactWith(Key key, boolean isCellInteraction) {
+            inventory.add(key);
             area.unregisterActor(key);
         }
         public void interactWith(Staff staff, boolean isCellInteraction) {
-            hasStaff=true;
+            hasStaff = true;
             area.unregisterActor(staff);
         }
         public void interactWith(Connector connector, boolean isCellInteraction) {
             if (connector.takeCellSpace()){
-                System.out.println("Interacte with connector "+connector.getOrientation().toString()+"\n Destination "+connector.destinationCoordinates);
+                for (Key key : inventory){
+                    if (key.getId() == connector.getKeyID()){
+                        connector.setStats(Connector.ConnectorStats.OPEN);
+                        inventory.remove(key);
+                        System.out.println("Door opened");
+                        return;
+                    }
+                }
+                System.out.println("You need key number "+connector.getKeyID());
             } else {
-                ICRoguePlayer.this.leaveArea();
-                ICRoguePlayer.this.enterArea(area,connector.destinationCoordinates);
+                if (!isInDisplacement()){
+                    changePosition(connector.destinationCoordinates);
+                }
             }
 
         }

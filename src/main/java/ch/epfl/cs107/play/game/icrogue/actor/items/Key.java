@@ -21,6 +21,10 @@ public class Key extends Item {
         area.registerActor(this);
     }
 
+    public int getId(){
+        return id;
+    }
+
     @Override
     public List<DiscreteCoordinates> getCurrentCells() {
         return super.getCurrentCells();
