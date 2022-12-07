@@ -1,10 +1,9 @@
 package ch.epfl.cs107.play.game.icrogue.actor;
 
-import ch.epfl.cs107.play.game.actor.Graphics;
 import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.*;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
-import ch.epfl.cs107.play.game.icrogue.actor.items.Item;
+import ch.epfl.cs107.play.game.icrogue.ICRogue;
 import ch.epfl.cs107.play.game.icrogue.actor.items.Key;
 import ch.epfl.cs107.play.game.icrogue.actor.items.Staff;
 import ch.epfl.cs107.play.game.icrogue.actor.projectiles.FireBall;
@@ -32,6 +31,8 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
     private boolean hasStaff;
     private final static int MOVE_DURATION = 8;
     private List<Key> inventory = new ArrayList<>();
+    public boolean isChangingRoom = false;
+    public DiscreteCoordinates switchRoomInfo;
 
     int cooldown = 0;
 
@@ -217,7 +218,7 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
             if (connector.takeCellSpace()){
                 for (Key key : inventory){
                     if (key.getId() == connector.getKeyID()){
-                        connector.setStats(Connector.ConnectorStats.OPEN);
+                        connector.setStats(Connector.ConnectorStats.CLOSE);
                         inventory.remove(key);
                         System.out.println("Door opened");
                         return;
@@ -226,7 +227,8 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
                 System.out.println("You need key number "+connector.getKeyID());
             } else {
                 if (!isInDisplacement()){
-                    changePosition(connector.destinationCoordinates);
+                    switchRoomInfo = connector.getDestinationRoomCoords();
+                    isChangingRoom = true;
                 }
             }
 

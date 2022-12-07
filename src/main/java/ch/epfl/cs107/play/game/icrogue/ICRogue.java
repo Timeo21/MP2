@@ -12,9 +12,12 @@ import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.window.Keyboard;
 import ch.epfl.cs107.play.window.Window;
 
+import javax.swing.*;
+
 public class ICRogue extends AreaGame {
     private Window window;
     private FileSystem fileSystem;
+    private String[][] titleMap;
 
     public final static float CAMERA_SCALE_FACTOR = 11f;
 
@@ -33,6 +36,9 @@ public class ICRogue extends AreaGame {
 
     @Override
     public void update(float deltaTime) {
+        if (player.isChangingRoom){
+            switchRoom(player.switchRoomInfo);
+        }
         if (getCurrentArea().getKeyboard().get(Keyboard.R).isPressed()){
             initLevel();
         }
@@ -40,7 +46,6 @@ public class ICRogue extends AreaGame {
     }
 
     private void initLevel(){
-
         /*
         addArea(new Level0Room(new DiscreteCoordinates(0,0)));
         ICRogueRoom area = (ICRogueRoom)setCurrentArea("icrogue/level000",true);
@@ -50,11 +55,20 @@ public class ICRogue extends AreaGame {
          */
 
         Level0 level0 = new Level0(4,2,new DiscreteCoordinates(0,0));
-        level0.addArea(this);
+        titleMap = level0.addArea(this);
         ICRogueRoom area = (ICRogueRoom) setCurrentArea("icrogue/level000",true);
         DiscreteCoordinates coordinates = area.getPlayerSpawnPosition();
         player = new ICRoguePlayer(area, Orientation.UP,coordinates,"zelda/player");
         player.enterArea(area,coordinates);
+
+    }
+
+    public void switchRoom(DiscreteCoordinates newRoomCoords){
+        getCurrentArea().unregisterActor(player);
+        ICRogueRoom area = (ICRogueRoom) setCurrentArea(titleMap[newRoomCoords.x][newRoomCoords.y],false);
+        area.registerActor(player);
+        player.changePosition(area.getPlayerSpawnPosition());
+        player.isChangingRoom = false;
     }
 
     @Override

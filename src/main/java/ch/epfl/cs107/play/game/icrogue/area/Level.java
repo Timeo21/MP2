@@ -2,7 +2,6 @@ package ch.epfl.cs107.play.game.icrogue.area;
 
 import ch.epfl.cs107.play.game.icrogue.ICRogue;
 import ch.epfl.cs107.play.game.icrogue.actor.Connector;
-import ch.epfl.cs107.play.game.icrogue.area.level0.rooms.Level0Room;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 
 public abstract class Level {
@@ -34,26 +33,32 @@ public abstract class Level {
 
     protected void setRoomConnectorDestination(DiscreteCoordinates coords, String destination, ConnectorInRoom connector){
         this.connector =  map[coords.x][coords.y].getConnector().get(connector.getIndex());
-        this.connector = new Connector(map[coords.x][coords.y], Level0Room.Level0Connectors.getAllConnectorsPosition().get(connector.getIndex()),
-                Level0Room.Level0Connectors.getAllConnectorsOrientation().get(connector.getIndex()), Connector.ConnectorStats.CLOSE,destination,connector.getDestination());
+        this.connector.setStats(Connector.ConnectorStats.CLOSE);
+        this.connector.setDestinationAreaName(destination);
     }
 
     protected void setRoomConnector(DiscreteCoordinates coords, String destination, ConnectorInRoom connector){
         this.connector =  map[coords.x][coords.y].getConnector().get(connector.getIndex());
-        this.connector = new Connector(map[coords.x][coords.y], Level0Room.Level0Connectors.getAllConnectorsPosition().get(connector.getIndex()),
-                Level0Room.Level0Connectors.getAllConnectorsOrientation().get(connector.getIndex()), Connector.ConnectorStats.LOCKED,destination,connector.getDestination());
+        this.connector.setStats(Connector.ConnectorStats.CLOSE);
+        this.connector.setDestinationAreaName(destination);
     }
 
     protected void lockRoomConnector(DiscreteCoordinates coords, ConnectorInRoom connector, int keyId){
-        map[coords.x][coords.y].getConnector().get(connector.getIndex()).setKeyID(keyId);
+        this.connector =  map[coords.x][coords.y].getConnector().get(connector.getIndex());
+        this.connector.setStats(Connector.ConnectorStats.LOCKED,keyId);
     }
 
-    public void addArea(ICRogue icRogue){
-        for (ICRogueRoom[] rooms : map){
-            for (ICRogueRoom room : rooms){
-                if (room!=null) icRogue.addArea(room);
+    public String[][] addArea(ICRogue icRogue){
+        String[][] titleMap = new String[width][height];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (map[i][j] != null){
+                    icRogue.addArea(map[i][j]);
+                    titleMap[i][j] = map[i][j].getTitle();
+                }
             }
         }
+        return titleMap;
     }
 
     protected void setStartRoomName(DiscreteCoordinates coords){

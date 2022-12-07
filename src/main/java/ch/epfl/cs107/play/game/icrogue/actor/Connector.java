@@ -17,7 +17,7 @@ public class Connector extends AreaEntity {
     private int keyID;
     private ConnectorStats stats;
     private String destinationAreaName;
-    public DiscreteCoordinates destinationCoordinates;
+    private DiscreteCoordinates destinationCoordinates;
     private Sprite[] sprites = new Sprite[4];
     private boolean takeSpace;
     public enum ConnectorStats{
@@ -72,6 +72,10 @@ public class Connector extends AreaEntity {
         this.keyID = keyID;
     }
 
+    public void setDestinationAreaName(String destinationAreaName){
+        this.destinationAreaName = destinationAreaName;
+    }
+
     @Override
     public List<DiscreteCoordinates> getCurrentCells() {
         DiscreteCoordinates coordinates = getCurrentMainCellCoordinates();
@@ -93,8 +97,19 @@ public class Connector extends AreaEntity {
             setStats(ConnectorStats.CLOSE);
         }
     }
+
     @Override
     public void acceptInteraction(AreaInteractionVisitor v, boolean isCellInteraction) {
         ((ICRogueInteractionHandler) v).interactWith(this,isCellInteraction);
+    }
+    public DiscreteCoordinates getDestinationCoordinates(){
+        return new DiscreteCoordinates(destinationCoordinates.x,destinationCoordinates.y);
+    }
+
+    public DiscreteCoordinates getDestinationRoomCoords(){
+        return new DiscreteCoordinates(Integer.parseInt(String.valueOf(destinationAreaName.charAt(14))),Integer.parseInt(String.valueOf(destinationAreaName.charAt(15))));
+    }
+    public void setDestinationCoordinates(DiscreteCoordinates coords){
+        this.destinationCoordinates = coords;
     }
 }

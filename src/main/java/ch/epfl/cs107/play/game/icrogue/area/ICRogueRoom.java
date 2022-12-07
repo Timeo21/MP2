@@ -95,6 +95,6 @@ public abstract class ICRogueRoom extends Area {
         }
     }
     protected List<Connector> getConnector(){
-        return connectors;
+        return new ArrayList<>(connectors);
     }
 }

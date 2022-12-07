@@ -15,13 +15,17 @@ import java.util.Collections;
 import java.util.List;
 
 public class Level0Room extends ICRogueRoom {
+    private static List<Orientation> orientations = new ArrayList<>();
+    private static List<DiscreteCoordinates> positions = new ArrayList<>();
     public Level0Room(DiscreteCoordinates coordinates) {
         super(Level0Connectors.getAllConnectorsPosition(),Level0Connectors.getAllConnectorsOrientation(),"icrogue/Level0Room", coordinates);
     }
 
+
     @Override
     protected void createArea() {
         registerActor(new Background(this,"icrogue/Level0Room"));
+        new Staff(this, Orientation.DOWN,new DiscreteCoordinates(4,4));
         super.createArea();
     }
 
@@ -40,6 +44,8 @@ public class Level0Room extends ICRogueRoom {
 
         Level0Connectors(DiscreteCoordinates position, DiscreteCoordinates destination, Orientation orientation) {
             this.destination = destination;
+            orientations.add(orientation);
+            positions.add(position);
         }
 
         @Override
@@ -52,10 +58,10 @@ public class Level0Room extends ICRogueRoom {
             return destination;
         }
         public static List<Orientation> getAllConnectorsOrientation(){
-            return List.of(Orientation.RIGHT,Orientation.UP,Orientation.LEFT,Orientation.DOWN);
+            return orientations;
         }
         public static List<DiscreteCoordinates> getAllConnectorsPosition(){
-            return List.of(new DiscreteCoordinates(9, 4),new DiscreteCoordinates(4, 9),new DiscreteCoordinates(0, 4),new DiscreteCoordinates(4, 0));
+            return positions;
         }
     }
 }

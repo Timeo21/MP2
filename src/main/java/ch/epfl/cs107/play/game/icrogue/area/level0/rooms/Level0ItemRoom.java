@@ -10,4 +10,9 @@ public abstract class Level0ItemRoom extends Level0Room{
     public Level0ItemRoom(DiscreteCoordinates coordinates) {
         super(coordinates);
     }
+
+    @Override
+    protected void createArea() {
+        super.createArea();
+    }
 }
