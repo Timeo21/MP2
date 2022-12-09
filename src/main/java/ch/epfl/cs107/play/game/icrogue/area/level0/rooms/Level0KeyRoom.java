@@ -13,7 +13,7 @@ public class Level0KeyRoom extends Level0ItemRoom{
 
     @Override
     protected void createArea() {
-        new Key(this, Orientation.DOWN,new DiscreteCoordinates(5,5),keyId);
+        addItem(new Key(this, Orientation.DOWN,new DiscreteCoordinates(5,5),keyId));
         super.createArea();
     }
 }

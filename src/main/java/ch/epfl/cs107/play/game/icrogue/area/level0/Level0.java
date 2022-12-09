@@ -1,6 +1,7 @@
 package ch.epfl.cs107.play.game.icrogue.area.level0;
 
 import ch.epfl.cs107.play.game.icrogue.area.Level;
+import ch.epfl.cs107.play.game.icrogue.area.level0.rooms.Level0EnemyRoom;
 import ch.epfl.cs107.play.game.icrogue.area.level0.rooms.Level0KeyRoom;
 import ch.epfl.cs107.play.game.icrogue.area.level0.rooms.Level0Room;
 import ch.epfl.cs107.play.game.icrogue.area.level0.rooms.Level0StaffRoom;
@@ -15,7 +16,7 @@ public class Level0 extends Level {
 
     @Override
     protected void generateFixedMap() {
-        generateMap2();
+        generateFinalMap();
     }
 
     private void generateMap1(){
@@ -31,7 +32,7 @@ public class Level0 extends Level {
 
     private void generateMap2() {
         DiscreteCoordinates room00 = new DiscreteCoordinates(0, 0);
-        setRoom(room00, new Level0Room(room00));
+        setRoom(room00, new Level0EnemyRoom(room00));
         setRoomConnector(room00, "icrogue/level010", Level0Room.Level0Connectors.E);
 
         DiscreteCoordinates room10 = new DiscreteCoordinates(1,0);
@@ -52,7 +53,7 @@ public class Level0 extends Level {
         setRoomConnector(room30, "icrogue/level020", Level0Room.Level0Connectors.W);
 
         DiscreteCoordinates room11 = new DiscreteCoordinates(1, 1);
-        setRoom (room11, new Level0Room(room11));
+        setRoom (room11, new Level0EnemyRoom(room11));
         setRoomConnector(room11, "icrogue/level010", Level0Room.Level0Connectors.N);
     }
 }

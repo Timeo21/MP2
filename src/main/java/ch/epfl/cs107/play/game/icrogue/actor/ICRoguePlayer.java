@@ -3,9 +3,11 @@ package ch.epfl.cs107.play.game.icrogue.actor;
 import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.*;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
+import ch.epfl.cs107.play.game.icrogue.actor.enemies.Turret;
 import ch.epfl.cs107.play.game.icrogue.actor.items.Key;
 import ch.epfl.cs107.play.game.icrogue.actor.items.Staff;
 import ch.epfl.cs107.play.game.icrogue.actor.projectiles.FireBall;
+import ch.epfl.cs107.play.game.icrogue.area.ICRogueRoom;
 import ch.epfl.cs107.play.game.icrogue.handler.ICRogueInteractionHandler;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.RegionOfInterest;
@@ -32,7 +34,8 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
     public boolean isChangingRoom = false;
     public DiscreteCoordinates[] switchRoomInfo = new DiscreteCoordinates[2];
 
-    int cooldown = 0;
+    final float COOLDOWN = .5f;
+    float timeWait;
 
     /**
      * @param area        (Area): Owner area. Not null
@@ -44,7 +47,6 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
         this.orientation = orientation;
         this.area = area;
         this.playerInteractionHandler = new ICRoguePlayerInteractionHandler();
-        this.hasStaff = false;
 
         // Walking Animations
         Sprite[][] animationSprites = Sprite.extractSprites("zelda/player", 4, 0.75f, 1.5f, this, 16, 32, new Vector(0.15f, -0.15f),
@@ -70,11 +72,11 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
     public void update(float deltaTime) {
         // Shooting fireball cooldown
         if (fireBalling){
-            if (cooldown > 10){
+            if (timeWait > COOLDOWN){
                 fireBalling = false;
-                cooldown = 0;
+                timeWait = 0;
             } else {
-                cooldown++;
+                timeWait += deltaTime;
             }
         }
 
@@ -204,21 +206,27 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
     }
 
     public class ICRoguePlayerInteractionHandler implements ICRogueInteractionHandler{
+        @Override
         public void interactWith(Key key, boolean isCellInteraction) {
             inventory.add(key);
             key.collect();
         }
+        @Override
         public void interactWith(Staff staff, boolean isCellInteraction) {
             hasStaff = true;
             staff.collect();
         }
+        @Override
         public void interactWith(Connector connector, boolean isCellInteraction) {
             if (connector.takeCellSpace()){
                 for (Key key : inventory){
                     if (key.getId() == connector.getKeyID()){
-                        connector.setStats(Connector.ConnectorStats.CLOSE);
+                        if (((ICRogueRoom) getOwnerArea()).isDoorsOpen){
+                            connector.setStats(Connector.ConnectorStats.OPEN);
+                        } else {
+                            connector.setStats(Connector.ConnectorStats.CLOSE);
+                        }
                         inventory.remove(key);
-                        System.out.println("Door opened");
                         return;
                     }
                 }
@@ -231,6 +239,11 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
                 }
             }
 
+        }
+
+        @Override
+        public void interactWith(Turret turret, boolean isCellInteraction) {
+            turret.die();
         }
     }
 }

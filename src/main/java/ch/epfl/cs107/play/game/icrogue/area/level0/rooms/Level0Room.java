@@ -3,7 +3,7 @@ package ch.epfl.cs107.play.game.icrogue.area.level0.rooms;
 
 import ch.epfl.cs107.play.game.areagame.actor.Background;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
-import ch.epfl.cs107.play.game.icrogue.actor.items.Staff;
+import ch.epfl.cs107.play.game.icrogue.actor.enemies.Turret;
 import ch.epfl.cs107.play.game.icrogue.area.ConnectorInRoom;
 import ch.epfl.cs107.play.game.icrogue.area.ICRogueRoom;
 import ch.epfl.cs107.play.io.FileSystem;
@@ -11,6 +11,7 @@ import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.window.Window;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Level0Room extends ICRogueRoom {
@@ -28,7 +29,9 @@ public class Level0Room extends ICRogueRoom {
     @Override
     protected void createArea() {
         registerActor(new Background(this,"icrogue/Level0Room"));
+        //new Key(this, Orientation.DOWN,new DiscreteCoordinates(4,4),2);
         //new Staff(this, Orientation.DOWN,new DiscreteCoordinates(4,4));
+        //new Turret(this,Orientation.UP,new DiscreteCoordinates(1,8), Collections.singletonList(Orientation.DOWN));
         super.createArea();
     }
 
@@ -67,4 +70,5 @@ public class Level0Room extends ICRogueRoom {
             return positions;
         }
     }
+
 }

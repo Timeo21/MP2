@@ -103,6 +103,12 @@ public class Connector extends AreaEntity {
         }
     }
 
+    public void openDoor(){
+        if (stats.equals(ConnectorStats.CLOSE)){
+            setStats(ConnectorStats.OPEN);
+        }
+    }
+
     @Override
     public void acceptInteraction(AreaInteractionVisitor v, boolean isCellInteraction) {
         ((ICRogueInteractionHandler) v).interactWith(this,isCellInteraction);

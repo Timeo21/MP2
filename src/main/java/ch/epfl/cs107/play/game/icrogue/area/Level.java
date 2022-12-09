@@ -2,7 +2,12 @@ package ch.epfl.cs107.play.game.icrogue.area;
 
 import ch.epfl.cs107.play.game.icrogue.ICRogue;
 import ch.epfl.cs107.play.game.icrogue.actor.Connector;
+import ch.epfl.cs107.play.game.icrogue.area.level0.rooms.Level0Room;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
+import ch.epfl.cs107.play.signal.logic.Logic;
+
+import static ch.epfl.cs107.play.signal.logic.Logic.FALSE;
+import static ch.epfl.cs107.play.signal.logic.Logic.TRUE;
 
 public abstract class Level {
     ICRogueRoom[][] map;
@@ -12,6 +17,7 @@ public abstract class Level {
     private Connector connector;
     int height;
     int width;
+    private Logic logic = FALSE;
     public Level(int height, int width, DiscreteCoordinates startRoomCoords){
         this(height,width,startRoomCoords,new DiscreteCoordinates(0,0));
     }
@@ -58,10 +64,6 @@ public abstract class Level {
             }
         }
         return titleMap;
-    }
-
-    public void switchRoom(DiscreteCoordinates newRoomCoords, ICRogue icRogue){
-
     }
 
     protected void setStartRoomName(DiscreteCoordinates coords){

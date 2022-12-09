@@ -8,13 +8,14 @@ import ch.epfl.cs107.play.game.icrogue.actor.Connector;
 import ch.epfl.cs107.play.game.icrogue.area.level0.rooms.Level0Room;
 import ch.epfl.cs107.play.io.FileSystem;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
+import ch.epfl.cs107.play.signal.logic.Logic;
 import ch.epfl.cs107.play.window.Keyboard;
 import ch.epfl.cs107.play.window.Window;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ICRogueRoom extends Area {
+public abstract class ICRogueRoom extends Area implements Logic {
     private String behavoirName;
     private ICRogueBehavior behavior;
     protected DiscreteCoordinates roomCoordinates;
@@ -22,7 +23,8 @@ public abstract class ICRogueRoom extends Area {
     private List<Orientation> orientations;
     private List<Connector> connectors = new ArrayList<>();
     private boolean isVisited;
-    private boolean isResolved;
+    protected Logic logic;
+    public boolean isDoorsOpen;
 
     public ICRogueRoom(List<DiscreteCoordinates> connectorsCoordinates, List<Orientation> orientations, String behaviorName, DiscreteCoordinates roomCoordinates){
         this.roomCoordinates = roomCoordinates;
@@ -30,7 +32,7 @@ public abstract class ICRogueRoom extends Area {
         this.positions = connectorsCoordinates;
         this.orientations = orientations;
         isVisited = false;
-        isResolved = false;
+        logic = TRUE;
         connectors.add(new Connector(this, positions.get(0),orientations.get(0), Connector.ConnectorStats.INVISIBLE,"", Level0Room.Level0Connectors.W.getDestination()));
         connectors.add(new Connector(this, positions.get(1),orientations.get(1), Connector.ConnectorStats.INVISIBLE,"", Level0Room.Level0Connectors.S.getDestination()));
         connectors.add(new Connector(this, positions.get(2),orientations.get(2), Connector.ConnectorStats.INVISIBLE,"", Level0Room.Level0Connectors.E.getDestination()));
@@ -75,6 +77,12 @@ public abstract class ICRogueRoom extends Area {
         if (keyboard.get(Keyboard.O).isPressed()) cheatIfPressed(1);
         if (keyboard.get(Keyboard.L).isPressed()) cheatIfPressed(2);
         if (keyboard.get(Keyboard.T).isPressed()) cheatIfPressed(3);
+        if (!isDoorsOpen && logic.isOn()){
+            for (Connector connector: connectors){
+                connector.openDoor();
+                isDoorsOpen = true;
+            }
+        }
 
         super.update(deltaTime);
     }
@@ -106,4 +114,19 @@ public abstract class ICRogueRoom extends Area {
             this.isVisited = true;
         }
     }
+
+    @Override
+    public boolean isOn() {
+        return logic.isOn();
+    }
+    @Override
+    public boolean isOff() {
+        return logic.isOff();
+    }
+    @Override
+    public float getIntensity() {
+        return logic.getIntensity();
+    }
+
+
 }

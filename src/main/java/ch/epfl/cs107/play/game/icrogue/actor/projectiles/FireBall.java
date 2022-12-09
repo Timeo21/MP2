@@ -4,6 +4,7 @@ import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.*;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.game.icrogue.ICRogueBehavior;
+import ch.epfl.cs107.play.game.icrogue.actor.enemies.Turret;
 import ch.epfl.cs107.play.game.icrogue.handler.ICRogueInteractionHandler;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.RegionOfInterest;
@@ -88,6 +89,11 @@ public class FireBall extends Projectile implements Consumable, Interactor{
     }
 
     private class FireBallInteractionHandler implements ICRogueInteractionHandler{
+        @Override
+        public void interactWith(Turret turret, boolean isCellInteraction) {
+            turret.die();
+            consume();
+        }
         @Override
         public void interactWith(ICRogueBehavior.ICRogueCell cell, boolean isCellInteraction) {
             if(cell.getCellType().equals(ICRogueBehavior.ICRogueCellType.NONE)||cell.getCellType().equals(ICRogueBehavior.ICRogueCellType.WALL)|| cell.getCellType().equals(ICRogueBehavior.ICRogueCellType.HOLE)){

@@ -14,6 +14,7 @@ import java.util.List;
 public class ICRogueActor extends MovableAreaEntity {
 
     private Area area;
+    public boolean isDead;
     private Orientation orientation;
     private DiscreteCoordinates coordinates;
 
