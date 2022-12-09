@@ -21,12 +21,16 @@ public abstract class ICRogueRoom extends Area {
     private List<DiscreteCoordinates> positions;
     private List<Orientation> orientations;
     private List<Connector> connectors = new ArrayList<>();
+    private boolean isVisited;
+    private boolean isResolved;
 
     public ICRogueRoom(List<DiscreteCoordinates> connectorsCoordinates, List<Orientation> orientations, String behaviorName, DiscreteCoordinates roomCoordinates){
         this.roomCoordinates = roomCoordinates;
         this.behavoirName = behaviorName;
         this.positions = connectorsCoordinates;
         this.orientations = orientations;
+        isVisited = false;
+        isResolved = false;
         connectors.add(new Connector(this, positions.get(0),orientations.get(0), Connector.ConnectorStats.INVISIBLE,"", Level0Room.Level0Connectors.W.getDestination()));
         connectors.add(new Connector(this, positions.get(1),orientations.get(1), Connector.ConnectorStats.INVISIBLE,"", Level0Room.Level0Connectors.S.getDestination()));
         connectors.add(new Connector(this, positions.get(2),orientations.get(2), Connector.ConnectorStats.INVISIBLE,"", Level0Room.Level0Connectors.E.getDestination()));
@@ -96,5 +100,10 @@ public abstract class ICRogueRoom extends Area {
     }
     protected List<Connector> getConnector(){
         return new ArrayList<>(connectors);
+    }
+    public void visite(){
+        if (!this.isVisited) {
+            this.isVisited = true;
+        }
     }
 }

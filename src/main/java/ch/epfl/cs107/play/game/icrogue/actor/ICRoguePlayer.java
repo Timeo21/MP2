@@ -30,7 +30,7 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
     private final static int MOVE_DURATION = 8;
     private List<Key> inventory = new ArrayList<>();
     public boolean isChangingRoom = false;
-    public DiscreteCoordinates switchRoomInfo;
+    public DiscreteCoordinates[] switchRoomInfo = new DiscreteCoordinates[2];
 
     int cooldown = 0;
 
@@ -206,11 +206,11 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
     public class ICRoguePlayerInteractionHandler implements ICRogueInteractionHandler{
         public void interactWith(Key key, boolean isCellInteraction) {
             inventory.add(key);
-            area.unregisterActor(key);
+            key.collect();
         }
         public void interactWith(Staff staff, boolean isCellInteraction) {
             hasStaff = true;
-            area.unregisterActor(staff);
+            staff.collect();
         }
         public void interactWith(Connector connector, boolean isCellInteraction) {
             if (connector.takeCellSpace()){
@@ -225,7 +225,8 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
                 System.out.println("You need key number "+connector.getKeyID());
             } else {
                 if (!isInDisplacement()){
-                    switchRoomInfo = connector.getDestinationRoomCoords();
+                    switchRoomInfo[0] = connector.getDestinationRoomCoords();
+                    switchRoomInfo[1] = connector.getDestinationCoordinates();
                     isChangingRoom = true;
                 }
             }

@@ -15,4 +15,6 @@ public abstract class Level0ItemRoom extends Level0Room{
     protected void createArea() {
         super.createArea();
     }
+    public void resolve(){
+    }
 }

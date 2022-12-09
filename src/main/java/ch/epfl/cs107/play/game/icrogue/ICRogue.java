@@ -33,10 +33,13 @@ public class ICRogue extends AreaGame {
     @Override
     public void update(float deltaTime) {
         if (player.isChangingRoom){
-            switchRoom(player.switchRoomInfo);
+            switchRoom(player.switchRoomInfo[0]);
         }
         if (getCurrentArea().getKeyboard().get(Keyboard.R).isPressed()){
             initLevel();
+        }
+        if (getCurrentArea().getKeyboard().get(Keyboard.Y).isPressed()){
+            System.out.println("");
         }
         super.update(deltaTime);
     }
@@ -55,17 +58,16 @@ public class ICRogue extends AreaGame {
         ICRogueRoom area = (ICRogueRoom) setCurrentArea("icrogue/level010",true);
         DiscreteCoordinates coordinates = area.getPlayerSpawnPosition();
         player = new ICRoguePlayer(area, Orientation.UP,coordinates,"zelda/player");
+        area.visite();
         player.enterArea(area,coordinates);
     }
 
     public void switchRoom(DiscreteCoordinates newRoomCoords){
-        System.out.println(getCurrentArea());
-        getCurrentArea().unregisterActor(player);
+        player.leaveArea();
         ICRogueRoom area = (ICRogueRoom) setCurrentArea(titleMap[newRoomCoords.x][newRoomCoords.y],false);
-        area.registerActor(player);
-        player.changePosition(area.getPlayerSpawnPosition());
+        player.enterArea(area,player.switchRoomInfo[1]);
+        area.visite();
         player.isChangingRoom = false;
-        System.out.println(getCurrentArea());
     }
 
     @Override

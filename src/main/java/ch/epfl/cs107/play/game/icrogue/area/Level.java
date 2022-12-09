@@ -60,6 +60,10 @@ public abstract class Level {
         return titleMap;
     }
 
+    public void switchRoom(DiscreteCoordinates newRoomCoords, ICRogue icRogue){
+
+    }
+
     protected void setStartRoomName(DiscreteCoordinates coords){
         startRoomName = "icrogue/level0"+coords.x+coords.y;
     }
