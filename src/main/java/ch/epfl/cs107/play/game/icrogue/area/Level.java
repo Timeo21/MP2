@@ -70,4 +70,11 @@ public abstract class Level {
         startRoomName = "icrogue/level0"+coords.x+coords.y;
     }
 
+    public void update(float deltaTime){
+        ICRogueRoom bossRoom = map[bossRoomCoordinate.x][bossRoomCoordinate.y];
+        if ((bossRoom != null) && (bossRoom.logic == TRUE && logic == FALSE)) {
+            logic = TRUE;
+            System.out.println("Win");
+        }
+    }
 }

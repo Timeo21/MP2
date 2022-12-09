@@ -59,8 +59,10 @@ public class FireBall extends Projectile implements Consumable, Interactor{
 
     @Override
     public void consume() {
-        isConsumed = true;
-        area.unregisterActor(fireBall);
+        if (!isConsumed) {
+            area.unregisterActor(fireBall);
+            isConsumed = true;
+        }
     }
 
     @Override
