@@ -1,12 +1,12 @@
 package ch.epfl.cs107.play.game.tutosSolution;
 
+import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.AreaGame;
-import ch.epfl.cs107.play.game.areagame.actor.Orientation;
-import ch.epfl.cs107.play.game.tutosSolution.area.Tuto2Area;
+import ch.epfl.cs107.play.game.tutosSolution.actor.SimpleGhost;
 import ch.epfl.cs107.play.game.tutosSolution.area.tuto2.Ferme;
 import ch.epfl.cs107.play.game.tutosSolution.area.tuto2.Village;
 import ch.epfl.cs107.play.io.FileSystem;
-import ch.epfl.cs107.play.math.DiscreteCoordinates;
+import ch.epfl.cs107.play.math.Vector;
 import ch.epfl.cs107.play.window.Window;
 
 public class Tuto2 extends AreaGame {
@@ -15,6 +15,7 @@ public class Tuto2 extends AreaGame {
 	private final String[] areas = {"zelda/Ferme", "zelda/Village"};
 	
 	private int areaIndex;
+	SimpleGhost player;
 	/**
 	 * Add all the areas
 	 */
@@ -27,12 +28,14 @@ public class Tuto2 extends AreaGame {
 
 	@Override
 	public boolean begin(Window window, FileSystem fileSystem) {
-
-
 		if (super.begin(window, fileSystem)) {
 			createAreas();
 			areaIndex = 0;
-			initArea(areas[areaIndex]);
+			Area area = setCurrentArea(areas[areaIndex], true);
+
+			player = new SimpleGhost(new Vector(18, 7), "ghost.1");
+			area.registerActor(player);
+			area.setViewCandidate(player);
 			return true;
 		}
 		return false;
@@ -55,10 +58,18 @@ public class Tuto2 extends AreaGame {
 		return "Tuto2";
 	}
 
-	protected void switchArea() {
+		protected void switchArea() {
+			Area currentArea = getCurrentArea();
 
+			currentArea.unregisterActor(player);
 
-		areaIndex = (areaIndex==0) ? 1 : 0;
-	}
+			areaIndex = (areaIndex == 0)? 1 : 0;
+
+			currentArea = setCurrentArea(areas[areaIndex], false);
+			currentArea.registerActor(player);
+			currentArea.setViewCandidate(player);
+
+			player.strengthen();
+		}
 
 }

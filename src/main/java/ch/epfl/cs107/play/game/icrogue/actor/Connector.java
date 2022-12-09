@@ -35,7 +35,7 @@ public class Connector extends AreaEntity {
         this.stats = stats;
         this.destinationAreaName = destinationAreaName;
         this.destinationCoordinates = destinationCoordinates;
-        this.takeSpace = true;
+        takeSpace = true;
         orientation = orientation.opposite();
         sprites[0] = null;
         sprites[1] = new Sprite("icrogue/door_"+orientation.ordinal(),(orientation.ordinal()+1)%2+1, orientation.ordinal()%2+1, this);
@@ -63,6 +63,11 @@ public class Connector extends AreaEntity {
         if (!stats.equals(ConnectorStats.OPEN)){
             sprites[stats.ordinal()].draw(canvas);
         }
+    }
+
+    @Override
+    public void update(float deltaTime) {
+        super.update(deltaTime);
     }
 
     public int getKeyID(){

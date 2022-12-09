@@ -5,7 +5,7 @@ import ch.epfl.cs107.play.game.PauseMenu;
 import ch.epfl.cs107.play.io.FileSystem;
 import ch.epfl.cs107.play.window.Window;
 
-import java.util.*;
+import java.util.HashMap;
 import java.util.Map;
 
 

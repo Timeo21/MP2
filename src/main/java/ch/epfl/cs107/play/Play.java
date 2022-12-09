@@ -3,8 +3,6 @@ package ch.epfl.cs107.play;
 import ch.epfl.cs107.play.game.Game;
 import ch.epfl.cs107.play.game.areagame.io.ResourcePath;
 import ch.epfl.cs107.play.game.icrogue.ICRogue;
-import ch.epfl.cs107.play.game.tutosSolution.Tuto1;
-import ch.epfl.cs107.play.game.tutosSolution.Tuto2;
 import ch.epfl.cs107.play.io.DefaultFileSystem;
 import ch.epfl.cs107.play.io.FileSystem;
 import ch.epfl.cs107.play.io.ResourceFileSystem;
@@ -23,7 +21,6 @@ public class Play {
     private static final float ONE_SEC = 1E9f;
 	public static final int WINDOW_HEIGHT = size;
 	public static final int WINDOW_WIDTH = size;
-	private static Game currentGame;
 
 	/**
 	 * Main entry point.
@@ -37,7 +34,6 @@ public class Play {
         // Create a demo game and initialize corresponding texts
 
 		final Game game = new ICRogue();
-		currentGame = game;
 
 
 		// Use Swing display
@@ -85,9 +81,5 @@ public class Play {
 			// Release resources
 			window.dispose();
 		}
-	}
-
-	public Game getGame(){
-		return currentGame;
 	}
 }

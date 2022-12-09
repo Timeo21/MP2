@@ -3,15 +3,14 @@ package ch.epfl.cs107.play.game.icrogue.area.level0.rooms;
 
 import ch.epfl.cs107.play.game.areagame.actor.Background;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
-import ch.epfl.cs107.play.game.icrogue.actor.Connector;
-import ch.epfl.cs107.play.game.icrogue.actor.items.Key;
 import ch.epfl.cs107.play.game.icrogue.actor.items.Staff;
 import ch.epfl.cs107.play.game.icrogue.area.ConnectorInRoom;
 import ch.epfl.cs107.play.game.icrogue.area.ICRogueRoom;
+import ch.epfl.cs107.play.io.FileSystem;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
+import ch.epfl.cs107.play.window.Window;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Level0Room extends ICRogueRoom {
@@ -21,6 +20,10 @@ public class Level0Room extends ICRogueRoom {
         super(Level0Connectors.getAllConnectorsPosition(),Level0Connectors.getAllConnectorsOrientation(),"icrogue/Level0Room", coordinates);
     }
 
+    @Override
+    public boolean begin(Window window, FileSystem fileSystem) {
+        return super.begin(window, fileSystem);
+    }
 
     @Override
     protected void createArea() {

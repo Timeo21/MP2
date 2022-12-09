@@ -9,7 +9,6 @@ public class Level0KeyRoom extends Level0ItemRoom{
     public Level0KeyRoom(DiscreteCoordinates coordinates, int keyId) {
         super(coordinates);
         this.keyId = keyId;
-
     }
 
     @Override

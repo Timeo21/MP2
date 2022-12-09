@@ -15,7 +15,7 @@ public class Level0 extends Level {
 
     @Override
     protected void generateFixedMap() {
-        generateMap1();
+        generateMap2();
     }
 
     private void generateMap1(){
@@ -25,7 +25,7 @@ public class Level0 extends Level {
         lockRoomConnector(room00, Level0Room.Level0Connectors.E, KEY_ID1);
 
         DiscreteCoordinates room10 = new DiscreteCoordinates(1, 0);
-        setRoom(room10, new Level0Room(room10));
+        setRoom(room10, new Level0StaffRoom(room10));
         setRoomConnector(room10, "icrogue/level000", Level0Room.Level0Connectors.W);
     }
 

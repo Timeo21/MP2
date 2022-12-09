@@ -33,14 +33,13 @@ public abstract class Level {
 
     protected void setRoomConnectorDestination(DiscreteCoordinates coords, String destination, ConnectorInRoom connector){
         this.connector =  map[coords.x][coords.y].getConnector().get(connector.getIndex());
-        this.connector.setStats(Connector.ConnectorStats.CLOSE);
         this.connector.setDestinationAreaName(destination);
     }
 
     protected void setRoomConnector(DiscreteCoordinates coords, String destination, ConnectorInRoom connector){
         this.connector =  map[coords.x][coords.y].getConnector().get(connector.getIndex());
         this.connector.setStats(Connector.ConnectorStats.CLOSE);
-        this.connector.setDestinationAreaName(destination);
+        setRoomConnectorDestination(coords,destination,connector);
     }
 
     protected void lockRoomConnector(DiscreteCoordinates coords, ConnectorInRoom connector, int keyId){
