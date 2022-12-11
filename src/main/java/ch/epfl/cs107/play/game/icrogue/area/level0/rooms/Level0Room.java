@@ -3,7 +3,12 @@ package ch.epfl.cs107.play.game.icrogue.area.level0.rooms;
 
 import ch.epfl.cs107.play.game.areagame.actor.Background;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
+import ch.epfl.cs107.play.game.icrogue.actor.enemies.FlameSkull;
+import ch.epfl.cs107.play.game.icrogue.actor.enemies.Turret;
+import ch.epfl.cs107.play.game.icrogue.actor.items.Key;
+import ch.epfl.cs107.play.game.icrogue.actor.items.MedKit;
 import ch.epfl.cs107.play.game.icrogue.actor.items.SpeedShoes;
+import ch.epfl.cs107.play.game.icrogue.actor.items.Staff;
 import ch.epfl.cs107.play.game.icrogue.area.ConnectorInRoom;
 import ch.epfl.cs107.play.game.icrogue.area.ICRogueRoom;
 import ch.epfl.cs107.play.io.FileSystem;
@@ -11,6 +16,7 @@ import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.window.Window;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Level0Room extends ICRogueRoom {
@@ -32,7 +38,8 @@ public class Level0Room extends ICRogueRoom {
         //new Staff(this, Orientation.DOWN,new DiscreteCoordinates(4,4));
         //new Turret(this,Orientation.UP,new DiscreteCoordinates(1,8), Collections.singletonList(Orientation.DOWN));
         //new FlameSkull(this,Orientation.DOWN,new DiscreteCoordinates(4,4));
-        //new SpeedShoes(this,Orientation.DOWN,new DiscreteCoordinates(4,4));
+        //new SpeedShoes(this,Orientation.DOWN,new DiscreteCoordinates(4,4),0);
+        //new MedKit(this,Orientation.DOWN,new DiscreteCoordinates(4,4),3);
         super.createArea();
     }
 

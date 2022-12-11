@@ -1,5 +1,6 @@
 package ch.epfl.cs107.play.game.icrogue.actor.items;
 
+import ch.epfl.cs107.play.game.actor.TextGraphics;
 import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.Animation;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
@@ -10,17 +11,19 @@ import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Vector;
 import ch.epfl.cs107.play.window.Canvas;
 
-import java.util.List;
+import java.awt.*;
 
-public class Staff extends Item{
+public class MedKit extends Item{
     private Sprite[][] sprites;
     private Animation[] animations;
-    public Staff(Area area, Orientation orientation, DiscreteCoordinates position) {
-        super(area, orientation, position,0);
+    public MedKit(Area area, Orientation orientation, DiscreteCoordinates position,int price) {
+        super(area, orientation, position,price);
 
-        sprites = Sprite.extractSprites("zelda/staff",8,1,1,this,32,32,new Vector(0,0),
+        sprites = Sprite.extractSprites("custom/medkit",4,.7f,.7f,this,16,16,new Vector(.2f,.15f),
                 new Orientation[] {Orientation.DOWN , Orientation.RIGHT , Orientation.UP, Orientation.LEFT});
-        animations = Animation.createAnimations(4, sprites);
+
+        animations = Animation.createAnimations(5, sprites);
+
         area.registerActor(this);
     }
 
@@ -31,32 +34,28 @@ public class Staff extends Item{
     }
 
     @Override
-    public List<DiscreteCoordinates> getCurrentCells() {
-        return super.getCurrentCells();
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
+        animations[2].draw(canvas);
     }
 
     @Override
     public boolean takeCellSpace() {
-        return true;
+        return price != 0;
     }
 
     @Override
     public boolean isViewInteractable() {
-        return true;
+        return price != 0;
     }
 
     @Override
     public boolean isCellInteractable() {
-        return false;
+        return true;
     }
 
     @Override
     public void acceptInteraction(AreaInteractionVisitor v, boolean isCellInteraction) {
         ((ICRogueInteractionHandler) v).interactWith(this,isCellInteraction);
-    }
-
-    @Override
-    public void draw(Canvas canvas) {
-        animations[2].draw(canvas);
     }
 }

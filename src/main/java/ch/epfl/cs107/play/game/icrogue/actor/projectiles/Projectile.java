@@ -15,8 +15,8 @@ public abstract class Projectile extends ICRogueActor implements Interactor {
     private int frame;
     private int damage;
     private DiscreteCoordinates coordinates;
-    private final static int DEFAULT_DAMAGE = 1;
-    private final static int DEFAULT_MOVE_DURATION = 10;
+    protected final static int DEFAULT_DAMAGE = 1;
+    protected final static int DEFAULT_MOVE_DURATION = 10;
 
     public Projectile(Area area, Orientation orientation, DiscreteCoordinates coordinates, int frame, int damage) {
         super(area, orientation, coordinates);

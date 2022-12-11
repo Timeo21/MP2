@@ -62,9 +62,9 @@ public class ICRogue extends AreaGame {
         player.enterArea(area,coordinates);
          */
 
-        level0 = new Level0(8,8,new DiscreteCoordinates(2,2));
+        level0 = new Level0(8,8,new DiscreteCoordinates(0,0));
         titleMap = level0.addArea(this);
-        ICRogueRoom area = (ICRogueRoom) setCurrentArea("icrogue/level022",true);
+        ICRogueRoom area = (ICRogueRoom) setCurrentArea("icrogue/level000",true);
         DiscreteCoordinates coordinates = area.getPlayerSpawnPosition();
         player = new ICRoguePlayer(area, Orientation.UP,coordinates,"zelda/player");
         area.visite();

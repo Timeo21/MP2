@@ -17,7 +17,6 @@ import static ch.epfl.cs107.play.game.icrogue.RandomHelper.enemyGenerator;
 
 public class FlameSkull extends ICRogueActor {
     private Area area;
-    private DiscreteCoordinates position;
     private Orientation orientation;
     private Animation[] animations;
     private DiscreteCoordinates playerCoords;
@@ -26,7 +25,6 @@ public class FlameSkull extends ICRogueActor {
     public FlameSkull(Area area, Orientation orientation, DiscreteCoordinates position) {
         super(area, orientation, position);
         this.area = area;
-        this.position = position;
         this.orientation = orientation;
         Sprite[][] animationSprites = Sprite.extractSprites("zelda/flameskull", 3, 1.2f, 1.2f, this, 32, 32,new Vector(-.1f,0),
                 new Orientation[]{Orientation.UP, Orientation.LEFT, Orientation.DOWN, Orientation.RIGHT});

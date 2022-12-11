@@ -15,7 +15,58 @@ public class Level0 extends Level {
 
     @Override
     protected void generateFixedMap() {
-        generateLevel();
+        generateTestMap();
+    }
+
+    private void generateTestMap(){
+        DiscreteCoordinates room00 = new DiscreteCoordinates(0, 0);
+        setRoom(room00, new Level0Room(room00));
+        setRoomConnector(room00, "icrogue/level010", Level0Room.Level0Connectors.E);
+        setRoomConnector(room00, "icrogue/level001", Level0Room.Level0Connectors.S);
+
+        DiscreteCoordinates room10 = new DiscreteCoordinates(1, 0);
+        setRoom(room10, new Level0KeyRoom(room10,1));
+        setRoomConnector(room10, "icrogue/level011", Level0Room.Level0Connectors.S);
+        setRoomConnector(room10, "icrogue/level000", Level0Room.Level0Connectors.W);
+
+        DiscreteCoordinates room20 = new DiscreteCoordinates(2, 0);
+        setRoom(room20, new Level0MedKitRoom(room20));
+        setRoomConnector(room20, "icrogue/level021", Level0Room.Level0Connectors.S);
+        lockRoomConnector(room20, Level0Room.Level0Connectors.E,  12);
+        setRoomConnectorDestination(room20, "icrogue/level030", Level0Room.Level0Connectors.E);
+
+        DiscreteCoordinates room30 = new DiscreteCoordinates(3, 0);
+        setRoom(room30, new Level0TurretRoom(room30));
+        setRoomConnector(room30, "icrogue/level020", Level0Room.Level0Connectors.W);
+
+        DiscreteCoordinates room01 = new DiscreteCoordinates(0, 1);
+        setRoom(room01, new Level0TurretRoom(room01));
+        setRoomConnector(room01, "icrogue/level011", Level0Room.Level0Connectors.E);
+        setRoomConnector(room01, "icrogue/level000", Level0Room.Level0Connectors.N);
+
+        DiscreteCoordinates room11 = new DiscreteCoordinates(1, 1);
+        setRoom(room11, new Level0StaffRoom(room11));
+        setRoomConnector(room11, "icrogue/level001", Level0Room.Level0Connectors.W);
+        setRoomConnector(room11, "icrogue/level010", Level0Room.Level0Connectors.N);
+
+        lockRoomConnector(room11, Level0Room.Level0Connectors.E,  1);
+        setRoomConnectorDestination(room11, "icrogue/level021", Level0Room.Level0Connectors.E);
+
+        DiscreteCoordinates room21 = new DiscreteCoordinates(2, 1);
+        setRoom(room21, new Level0ShopRoom(room21));
+        setRoomConnector(room21, "icrogue/level031", Level0Room.Level0Connectors.E);
+        setRoomConnector(room21, "icrogue/level020", Level0Room.Level0Connectors.N);
+        setRoomConnector(room21, "icrogue/level011", Level0Room.Level0Connectors.W);
+
+        DiscreteCoordinates room31 = new DiscreteCoordinates(3, 1);
+        setRoom(room31, new Level0FlameSkullRoom(room31));
+        setRoomConnector(room31, "icrogue/level041", Level0Room.Level0Connectors.E);
+        setRoomConnector(room31, "icrogue/level021", Level0Room.Level0Connectors.W);
+
+        DiscreteCoordinates room41 = new DiscreteCoordinates(4, 1);
+        setRoom(room41, new Level0KeyRoom(room41,12));
+        setRoomConnector(room41, "icrogue/level031", Level0Room.Level0Connectors.W);
+
     }
 
     private void generateFinalMap() {
@@ -60,7 +111,7 @@ public class Level0 extends Level {
         setRoomConnector(room10,"icrogue/level000",Level0Room.Level0Connectors.W);
 
         DiscreteCoordinates room30 = new DiscreteCoordinates(3,0);
-        setRoom(room30, new Level0Room(room30));
+        setRoom(room30, new Level0MedKitRoom(room30));
         setRoomConnector(room30,"icrogue/level031",Level0Room.Level0Connectors.S);
 
         DiscreteCoordinates room50 = new DiscreteCoordinates(5,0);
@@ -98,7 +149,7 @@ public class Level0 extends Level {
         DiscreteCoordinates room02 = new DiscreteCoordinates(0,2);
         setRoom(room02, new Level0TurretRoom(room02));
         setRoomConnector(room02,"icrogue/level012",Level0Room.Level0Connectors.E);
-        lockRoomConnector(room02, Level0Room.Level0Connectors.S,2);
+        lockRoomConnector(room02, Level0Room.Level0Connectors.S,1);
         setRoomConnectorDestination(room02,"icrogue/level003", Level0Room.Level0Connectors.S);
 
         DiscreteCoordinates room12 = new DiscreteCoordinates(1,2);

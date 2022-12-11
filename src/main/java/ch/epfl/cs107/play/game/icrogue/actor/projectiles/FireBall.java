@@ -114,11 +114,9 @@ public class FireBall extends Projectile implements Consumable, Interactor{
         }
         @Override
         public void interactWith(FlameSkull flameSkull, boolean isCellInteraction) {
-            if (isCellInteraction){
                 flameSkull.die();
                 player.coin += 3;
                 consume();
-            }
         }
     }
 }

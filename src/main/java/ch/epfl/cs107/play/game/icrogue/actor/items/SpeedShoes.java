@@ -16,19 +16,15 @@ import java.awt.*;
 public class SpeedShoes extends Item{
     private Sprite[][] sprites;
     private Animation[] animations;
-    private TextGraphics priceText;
-    public int price = 3;
 
-    public SpeedShoes(Area area, Orientation orientation, DiscreteCoordinates position) {
-        super(area, orientation, position);
+    public SpeedShoes(Area area, Orientation orientation, DiscreteCoordinates position,int price) {
+        super(area, orientation, position,price);
 
         sprites = Sprite.extractSprites("custom/shoes",4,.6f,.6f,this,16,16,new Vector(.2f,.15f),
                 new Orientation[] {Orientation.DOWN , Orientation.RIGHT , Orientation.UP, Orientation.LEFT});
 
         animations = Animation.createAnimations(5, sprites);
-        priceText = new TextGraphics(Integer.toString(price), 0.4f, Color.orange);
-        priceText.setParent(this);
-        priceText.setAnchor(new Vector(0, 0.1f));
+
         area.registerActor(this);
     }
 
@@ -40,7 +36,7 @@ public class SpeedShoes extends Item{
 
     @Override
     public void draw(Canvas canvas) {
-        priceText.draw(canvas);
+        super.draw(canvas);
         animations[2].draw(canvas);
     }
 

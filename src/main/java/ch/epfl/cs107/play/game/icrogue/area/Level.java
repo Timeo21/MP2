@@ -19,7 +19,7 @@ public abstract class Level {
     int width;
     private Logic logic = FALSE;
     public Level(int height, int width, DiscreteCoordinates startRoomCoords){
-        this(height,width,startRoomCoords,new DiscreteCoordinates(0,0));
+        this(height,width,startRoomCoords,new DiscreteCoordinates(2,3));
     }
 
     public Level(int height, int width, DiscreteCoordinates startRoomCoords, DiscreteCoordinates bossRoomCoordinate){
