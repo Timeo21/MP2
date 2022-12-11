@@ -1,7 +1,9 @@
 package ch.epfl.cs107.play.game.icrogue;
 
+import ch.epfl.cs107.play.game.actor.TextGraphics;
 import ch.epfl.cs107.play.game.areagame.AreaGame;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
+import ch.epfl.cs107.play.game.icrogue.actor.ICRogueActor;
 import ch.epfl.cs107.play.game.icrogue.actor.ICRoguePlayer;
 import ch.epfl.cs107.play.game.icrogue.area.ICRogueRoom;
 import ch.epfl.cs107.play.game.icrogue.area.Level;
@@ -17,9 +19,9 @@ public class ICRogue extends AreaGame {
     private String[][] titleMap;
     private Level level0;
 
-    public final static float CAMERA_SCALE_FACTOR = 11f;
+    public final static float CAMERA_SCALE_FACTOR = 10f;
 
-    private ICRoguePlayer player;
+    private static ICRoguePlayer player;
 
     @Override
     public boolean begin(Window window, FileSystem fileSystem) {
@@ -60,9 +62,9 @@ public class ICRogue extends AreaGame {
         player.enterArea(area,coordinates);
          */
 
-        level0 = new Level0(8,8,null);
+        level0 = new Level0(8,8,new DiscreteCoordinates(2,2));
         titleMap = level0.addArea(this);
-        ICRogueRoom area = (ICRogueRoom) setCurrentArea("icrogue/level010",true);
+        ICRogueRoom area = (ICRogueRoom) setCurrentArea("icrogue/level022",true);
         DiscreteCoordinates coordinates = area.getPlayerSpawnPosition();
         player = new ICRoguePlayer(area, Orientation.UP,coordinates,"zelda/player");
         area.visite();
@@ -80,5 +82,9 @@ public class ICRogue extends AreaGame {
     @Override
     public String getTitle() {
         return "ICRogue";
+    }
+
+    public static DiscreteCoordinates getPlayerCoords(){
+        return player.getCoords();
     }
 }

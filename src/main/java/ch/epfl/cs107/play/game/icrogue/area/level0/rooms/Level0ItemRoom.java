@@ -15,11 +15,6 @@ public abstract class Level0ItemRoom extends Level0Room{
     }
 
     @Override
-    protected void createArea() {
-        super.createArea();
-    }
-
-    @Override
     public void update(float deltaTime) {
         checkCompletion();
         super.update(deltaTime);

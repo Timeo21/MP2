@@ -15,6 +15,7 @@ public class ICRogueActor extends MovableAreaEntity {
 
     private Area area;
     public boolean isDead;
+    public int life;
     private Orientation orientation;
     private DiscreteCoordinates coordinates;
 
@@ -54,6 +55,15 @@ public class ICRogueActor extends MovableAreaEntity {
     @Override
     public void draw(Canvas canvas) {
     }
+    public void takeDamage(int damage){
+        life = life - damage;
+        if (life <= 0) die();
+    }
+    public void die(){
+        isDead = true;
+        leaveArea();
+    }
+
 
     public void leaveArea(){
         getOwnerArea().unregisterActor(this);

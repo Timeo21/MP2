@@ -26,6 +26,7 @@ public abstract class Level {
         this.width = width;
         this.height = height;
         this.bossRoomCoordinate = bossRoomCoordinate;
+        this.roomSpawnCoords = startRoomCoords;
         map = new ICRogueRoom[width][height];
         generateFixedMap();
     }
@@ -64,6 +65,10 @@ public abstract class Level {
             }
         }
         return titleMap;
+    }
+
+    public DiscreteCoordinates getStartRoomCoords(){
+return roomSpawnCoords;
     }
 
     protected void setStartRoomName(DiscreteCoordinates coords){

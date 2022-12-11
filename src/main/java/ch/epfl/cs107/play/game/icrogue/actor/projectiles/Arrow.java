@@ -19,6 +19,7 @@ public class Arrow extends Projectile implements Consumable, Interactor {
     private Sprite sprite;
     private ArrowInteractionHandler interactionHandler;
     private Area area;
+    private int speed = 5;
     public Arrow(Area area, Orientation orientation, DiscreteCoordinates coordinates) {
         super(area, orientation, coordinates);
         sprite = new Sprite("zelda/arrow", 1f, 1f, this ,
@@ -32,19 +33,19 @@ public class Arrow extends Projectile implements Consumable, Interactor {
     @Override
     public void update(float deltaTime) {
         if(!isConsumed){
-            move(5);
+            move(speed);
         }
         super.update(deltaTime);
     }
 
     @Override
     public boolean wantsCellInteraction() {
-        return true;
+        return !isConsumed;
     }
 
     @Override
     public boolean wantsViewInteraction() {
-        return true;
+        return !isConsumed;
     }
 
     @Override
@@ -85,8 +86,10 @@ public class Arrow extends Projectile implements Consumable, Interactor {
 
         @Override
         public void interactWith(ICRoguePlayer player, boolean isCellInteraction) {
-            player.isDead = true;
-            consume();
+            if(isCellInteraction){
+                player.takeDamage(1);
+                consume();
+            }
         }
     }
 }

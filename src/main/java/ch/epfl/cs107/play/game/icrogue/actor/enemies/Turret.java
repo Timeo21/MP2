@@ -34,15 +34,11 @@ public class Turret extends ICRogueActor {
         area.registerActor(this);
     }
 
-    public void die(){
-        isDead = true;
-        area.unregisterActor(this);
-    }
-
     @Override
     public boolean isCellInteractable() {
         return true;
     }
+
 
     @Override
     public void acceptInteraction(AreaInteractionVisitor v, boolean isCellInteraction) {
@@ -63,9 +59,7 @@ public class Turret extends ICRogueActor {
 
     @Override
     public void draw(Canvas canvas) {
-        if(!isDead) {
             sprite.draw(canvas);
-        }
     }
 
 }

@@ -14,12 +14,12 @@ import ch.epfl.cs107.play.window.swing.SwingWindow;
  */
 public class Play {
 
-	private static int size = 1024;
+	private static int size = 900;
 	// default : 550
 
 	/** One second in nanosecond */
     private static final float ONE_SEC = 1E9f;
-	public static final int WINDOW_HEIGHT = size;
+	public static final int WINDOW_HEIGHT = size+25;
 	public static final int WINDOW_WIDTH = size;
 
 	/**

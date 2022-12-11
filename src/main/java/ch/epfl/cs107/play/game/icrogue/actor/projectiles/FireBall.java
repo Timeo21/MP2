@@ -4,6 +4,10 @@ import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.*;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.game.icrogue.ICRogueBehavior;
+import ch.epfl.cs107.play.game.icrogue.actor.Connector;
+import ch.epfl.cs107.play.game.icrogue.actor.ICRogueActor;
+import ch.epfl.cs107.play.game.icrogue.actor.ICRoguePlayer;
+import ch.epfl.cs107.play.game.icrogue.actor.enemies.FlameSkull;
 import ch.epfl.cs107.play.game.icrogue.actor.enemies.Turret;
 import ch.epfl.cs107.play.game.icrogue.handler.ICRogueInteractionHandler;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
@@ -22,7 +26,8 @@ public class FireBall extends Projectile implements Consumable, Interactor{
     private FireBall fireBall ;
     private DiscreteCoordinates coordinates;
     private boolean isConsumed;
-    public FireBall(Area area, Orientation orientation, DiscreteCoordinates position) {
+    private ICRoguePlayer player;
+    public FireBall(Area area, Orientation orientation, DiscreteCoordinates position, ICRoguePlayer player) {
         super(area, orientation, position, 5, 1);
 
 
@@ -35,9 +40,8 @@ public class FireBall extends Projectile implements Consumable, Interactor{
         this.area = area;
         this.orientation = orientation;
         interactionHandler = new FireBallInteractionHandler();
-        fireBall = this;
-        this.isConsumed = false;
-        area.registerActor(fireBall);
+        this.player = player;
+        area.registerActor(this);
     }
 
     @Override
@@ -60,7 +64,7 @@ public class FireBall extends Projectile implements Consumable, Interactor{
     @Override
     public void consume() {
         if (!isConsumed) {
-            area.unregisterActor(fireBall);
+            area.unregisterActor(this);
             isConsumed = true;
         }
     }
@@ -77,12 +81,12 @@ public class FireBall extends Projectile implements Consumable, Interactor{
 
     @Override
     public boolean wantsCellInteraction() {
-        return true;
+        return !isConsumed;
     }
 
     @Override
     public boolean wantsViewInteraction() {
-        return true;
+        return !isConsumed;
     }
 
     @Override
@@ -93,12 +97,26 @@ public class FireBall extends Projectile implements Consumable, Interactor{
     private class FireBallInteractionHandler implements ICRogueInteractionHandler{
         @Override
         public void interactWith(Turret turret, boolean isCellInteraction) {
-            turret.die();
-            consume();
+            if (isCellInteraction){
+                turret.die();
+                player.coin++;
+                consume();
+            }
         }
+
         @Override
         public void interactWith(ICRogueBehavior.ICRogueCell cell, boolean isCellInteraction) {
-            if(cell.getCellType().equals(ICRogueBehavior.ICRogueCellType.NONE)||cell.getCellType().equals(ICRogueBehavior.ICRogueCellType.WALL)|| cell.getCellType().equals(ICRogueBehavior.ICRogueCellType.HOLE)){
+            if(cell.getCellType().equals(ICRogueBehavior.ICRogueCellType.NONE)
+                    || cell.getCellType().equals(ICRogueBehavior.ICRogueCellType.WALL)
+                    || cell.getCellType().equals(ICRogueBehavior.ICRogueCellType.HOLE)) {
+                consume();
+            }
+        }
+        @Override
+        public void interactWith(FlameSkull flameSkull, boolean isCellInteraction) {
+            if (isCellInteraction){
+                flameSkull.die();
+                player.coin += 3;
                 consume();
             }
         }

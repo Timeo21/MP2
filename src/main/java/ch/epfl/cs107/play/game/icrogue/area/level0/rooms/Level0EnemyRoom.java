@@ -9,28 +9,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Level0EnemyRoom extends Level0Room{
+public abstract class Level0EnemyRoom extends Level0Room{
     private List<ICRogueActor> enemies = new ArrayList<>();
     public Level0EnemyRoom(DiscreteCoordinates coordinates) {
         super(coordinates);
         logic = FALSE;
     }
-
-    @Override
-    protected void createArea() {
-        addEnemy();
-        super.createArea();
-    }
-
-    protected void addEnemy(){
-        enemies.add(new Turret(this, Orientation.UP,new DiscreteCoordinates(1,8), Arrays.asList(Orientation.DOWN,Orientation.RIGHT)));
-        enemies.add(new Turret(this, Orientation.UP,new DiscreteCoordinates(8,1), Arrays.asList(Orientation.UP,Orientation.LEFT)));
-    }
-
     @Override
     public void update(float deltaTime) {
         checkCompletion();
         super.update(deltaTime);
+    }
+
+    protected void addEnemy(ICRogueActor enemy){
+        enemies.add(enemy);
     }
 
     public void checkCompletion(){

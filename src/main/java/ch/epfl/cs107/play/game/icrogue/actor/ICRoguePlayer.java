@@ -1,41 +1,46 @@
 package ch.epfl.cs107.play.game.icrogue.actor;
 
+import ch.epfl.cs107.play.game.actor.TextGraphics;
 import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.*;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
+import ch.epfl.cs107.play.game.icrogue.actor.enemies.FlameSkull;
 import ch.epfl.cs107.play.game.icrogue.actor.enemies.Turret;
 import ch.epfl.cs107.play.game.icrogue.actor.items.Key;
+import ch.epfl.cs107.play.game.icrogue.actor.items.SpeedShoes;
 import ch.epfl.cs107.play.game.icrogue.actor.items.Staff;
 import ch.epfl.cs107.play.game.icrogue.actor.projectiles.FireBall;
 import ch.epfl.cs107.play.game.icrogue.area.ICRogueRoom;
 import ch.epfl.cs107.play.game.icrogue.handler.ICRogueInteractionHandler;
-import ch.epfl.cs107.play.math.DiscreteCoordinates;
-import ch.epfl.cs107.play.math.RegionOfInterest;
-import ch.epfl.cs107.play.math.Vector;
+import ch.epfl.cs107.play.math.*;
 import ch.epfl.cs107.play.window.Button;
 import ch.epfl.cs107.play.window.Canvas;
 import ch.epfl.cs107.play.window.Keyboard;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class ICRoguePlayer extends ICRogueActor implements Interactor {
-    private Sprite[] idleSprites = new Sprite[4];
-    private Animation[] walkAnimations;
-    private Animation[] staffAnimations;
-    private Orientation orientation;
-    private boolean fireBalling;
-    private Area area;
-    private ICRoguePlayerInteractionHandler playerInteractionHandler;
-    private boolean hasStaff;
+    private final Animation[] walkAnimations;
+    private final Animation[] staffAnimations;
+    private final ICRoguePlayerInteractionHandler playerInteractionHandler;
+    private final List<Key> inventory = new ArrayList<>();
     private final static int MOVE_DURATION = 8;
-    private List<Key> inventory = new ArrayList<>();
-    public boolean isChangingRoom = false;
-    public DiscreteCoordinates[] switchRoomInfo = new DiscreteCoordinates[2];
-
+    private boolean fireBalling;
+    private boolean hasStaff;
+    public int coin;
+    private float speedBonus = 1;
     final float COOLDOWN = .5f;
-    float timeWait;
+    private float timeWait;
+    private Sprite[] idleSprites = new Sprite[4];
+    private Orientation orientation;
+    private TextGraphics lifeText;
+    private TextGraphics coinText;
+    public DiscreteCoordinates[] switchRoomInfo = new DiscreteCoordinates[2];
+    public boolean isChangingRoom = false;
+
 
     /**
      * @param area        (Area): Owner area. Not null
@@ -45,8 +50,14 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
     public ICRoguePlayer(Area area, Orientation orientation, DiscreteCoordinates position, String spriteName) {
         super(area, orientation, position);
         this.orientation = orientation;
-        this.area = area;
         this.playerInteractionHandler = new ICRoguePlayerInteractionHandler();
+        life = 5;
+        lifeText = new TextGraphics(Integer.toString(life),0.4f,Color.RED);
+        lifeText.setParent(this);
+        lifeText.setAnchor(new Vector(.8f, 0.1f));
+        coinText = new TextGraphics(Integer.toString(coin),0.4f,Color.ORANGE);
+        coinText.setParent(this);
+        coinText.setAnchor(new Vector(0.1f, 0.1f));
 
         // Walking Animations
         Sprite[][] animationSprites = Sprite.extractSprites("zelda/player", 4, 0.75f, 1.5f, this, 16, 32, new Vector(0.15f, -0.15f),
@@ -70,6 +81,8 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
 
     @Override
     public void update(float deltaTime) {
+        lifeText.setText(Integer.toString(life));
+        coinText.setText(Integer.toString(coin));
         // Shooting fireball cooldown
         if (fireBalling){
             if (timeWait > COOLDOWN){
@@ -93,6 +106,7 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
         moveIfPressed(Orientation.RIGHT, keyboard.get(Keyboard.RIGHT));
         moveIfPressed(Orientation.DOWN, keyboard.get(Keyboard.DOWN));
         fireBallIfPressed(keyboard.get(Keyboard.X));
+        fireBallIfPressed(keyboard.get(Keyboard.G));
 
         super.update(deltaTime);
     }
@@ -108,23 +122,28 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
             if (!isInDisplacement()) {
                 this.orientation = orientation;
                 orientate(orientation);
-                move(MOVE_DURATION);
+                move((int) (MOVE_DURATION/speedBonus));
             }
         }
     }
 
     private void fireBallIfPressed(Button button){
+        if(button.equals(getOwnerArea().getKeyboard().get(Keyboard.G))&& button.isPressed()){
+            speedBonus = 1.5f;
+        }
         // Press X key, has the staff and is not on cooldown
         if(button.isPressed() && hasStaff && !fireBalling){
             fireBalling = true;
             //if moving spawning the fireball on case forward to avoid setting his back on fire
             if (isInDisplacement()){
-                new FireBall(getOwnerArea(),orientation,getCurrentMainCellCoordinates().jump(orientation.toVector()));
-            } else new FireBall(getOwnerArea(),orientation,getCurrentMainCellCoordinates());
+                new FireBall(getOwnerArea(),orientation,getCurrentMainCellCoordinates().jump(orientation.toVector()),this);
+            } else new FireBall(getOwnerArea(),orientation,getCurrentMainCellCoordinates(),this);
         }
     }
     @Override
     public void draw(Canvas canvas) {
+        lifeText.draw(canvas);
+        coinText.draw(canvas);
         if (fireBalling){
             switch (orientation){
                 case UP -> staffAnimations[0].draw(canvas);
@@ -200,6 +219,15 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
         other.acceptInteraction(playerInteractionHandler,isCellInteraction);
     }
 
+    public DiscreteCoordinates getCoords(){
+        return getCurrentMainCellCoordinates();
+    }
+    @Override
+    public void takeDamage(int damage){
+        super.takeDamage(damage);
+        System.out.println("Life : "+life);
+    }
+
     @Override
     public boolean changePosition(DiscreteCoordinates newPosition) {
         return super.changePosition(newPosition);
@@ -218,7 +246,7 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
         }
         @Override
         public void interactWith(Connector connector, boolean isCellInteraction) {
-            if (connector.takeCellSpace()){
+            if (!isCellInteraction){
                 for (Key key : inventory){
                     if (key.getId() == connector.getKeyID()){
                         if (((ICRogueRoom) getOwnerArea()).isDoorsOpen){
@@ -240,10 +268,28 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
             }
 
         }
-
         @Override
         public void interactWith(Turret turret, boolean isCellInteraction) {
             turret.die();
+            coin++;
+        }
+        @Override
+        public void interactWith(FlameSkull flameSkull, boolean isCellInteraction) {
+            if (isCellInteraction){
+                flameSkull.die();
+                takeDamage(1);
+            }
+        }
+
+        @Override
+        public void interactWith(SpeedShoes speedShoes, boolean isCellInteraction) {
+            if (coin >= speedShoes.price){
+                speedShoes.collect();
+                speedBonus += 0.2;
+                coin -= 3;
+            } else {
+                System.out.println("no money");
+            }
         }
     }
 }

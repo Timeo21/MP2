@@ -120,7 +120,4 @@ public class Connector extends AreaEntity {
     public DiscreteCoordinates getDestinationRoomCoords(){
         return new DiscreteCoordinates(Integer.parseInt(String.valueOf(destinationAreaName.charAt(14))),Integer.parseInt(String.valueOf(destinationAreaName.charAt(15))));
     }
-    public void setDestinationCoordinates(DiscreteCoordinates coords){
-        this.destinationCoordinates = coords;
-    }
 }
