@@ -1,6 +1,5 @@
 package ch.epfl.cs107.play.game.icrogue.actor.items;
 
-import ch.epfl.cs107.play.game.actor.TextGraphics;
 import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.Animation;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
@@ -13,7 +12,7 @@ import ch.epfl.cs107.play.window.Canvas;
 
 import java.awt.*;
 
-public class SpeedShoes extends Item{
+public class SpeedShoes extends BuyableItem{
     private Sprite[][] sprites;
     private Animation[] animations;
 

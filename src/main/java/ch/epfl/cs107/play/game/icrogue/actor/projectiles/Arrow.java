@@ -23,7 +23,7 @@ public class Arrow extends Projectile implements Consumable, Interactor {
     public Arrow(Area area, Orientation orientation, DiscreteCoordinates coordinates) {
         super(area, orientation, coordinates);
         sprite = new Sprite("custom/laser", 1f, 1f, this ,
-                new RegionOfInterest(32* orientation.ordinal(), 0, 32, 32),
+                new RegionOfInterest(16* orientation.ordinal(), 0, 16, 16),
                 new Vector(0, 0));
         interactionHandler = new ArrowInteractionHandler();
         this.area = area;

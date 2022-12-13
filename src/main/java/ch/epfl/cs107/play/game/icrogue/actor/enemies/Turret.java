@@ -19,14 +19,12 @@ public class Turret extends ICRogueActor {
     private Sprite sprite;
     private List<Orientation> shootDirections;
     private Animation[] animations;
-    private final float COOLDOWN = 2.03f;
-    private float timeWaited = 0.f;
 
 
     public Turret(Area area, Orientation orientation, DiscreteCoordinates position, List<Orientation> shootDirections) {
         super(area, orientation, position);
         this.shootDirections = shootDirections;
-        Sprite[][] sprites = Sprite.extractSprites("custom/turret", 6, 1.2f, 1.2f, this, 32, 32,new Vector(-.1f,0),
+        Sprite[][] sprites = Sprite.extractSprites("custom/turret", 6, .9f, .9f, this, 16, 16,new Vector(0,.05f),
                 new Orientation[]{Orientation.UP, Orientation.LEFT, Orientation.DOWN, Orientation.RIGHT});
         animations = Animation.createAnimations(9,sprites,false);
         area.registerActor(this);

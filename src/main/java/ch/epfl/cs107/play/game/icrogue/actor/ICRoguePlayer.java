@@ -304,7 +304,7 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
         public void interactWith(SpeedShoes speedShoes, boolean isCellInteraction) {
             if (coin >= speedShoes.price){
                 speedShoes.collect();
-                speedBonus += 0.2;
+                speedBonus += 0.1;
                 coin -= speedShoes.price;
             } else {
                 System.out.println("no money");

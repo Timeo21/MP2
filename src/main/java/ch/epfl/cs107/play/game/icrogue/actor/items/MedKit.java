@@ -1,6 +1,5 @@
 package ch.epfl.cs107.play.game.icrogue.actor.items;
 
-import ch.epfl.cs107.play.game.actor.TextGraphics;
 import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.Animation;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
@@ -10,10 +9,7 @@ import ch.epfl.cs107.play.game.icrogue.handler.ICRogueInteractionHandler;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Vector;
 import ch.epfl.cs107.play.window.Canvas;
-
-import java.awt.*;
-
-public class MedKit extends Item{
+public class MedKit extends BuyableItem{
     private Sprite[][] sprites;
     private Animation[] animations;
     public MedKit(Area area, Orientation orientation, DiscreteCoordinates position,int price) {
