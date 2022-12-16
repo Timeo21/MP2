@@ -1,8 +1,6 @@
 package ch.epfl.cs107.play.game.icrogue.area.level0;
 
 import ch.epfl.cs107.play.game.icrogue.RandomHelper;
-import ch.epfl.cs107.play.game.icrogue.actor.Connector;
-import ch.epfl.cs107.play.game.icrogue.area.ICRogueRoom;
 import ch.epfl.cs107.play.game.icrogue.area.Level;
 import ch.epfl.cs107.play.game.icrogue.area.level0.rooms.*;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
@@ -16,24 +14,31 @@ public class Level0 extends Level {
     private final int BOSS_KEY_ID = 2;
     protected final static int[] roomDistribution = new int[]{RoomType.TURRET_ROOM.number,RoomType.SKULL_ROOM.number,RoomType.STAFF_ROOM.number,
             RoomType.BOSS_KEY.number,RoomType.SPAWN.number,RoomType.MEDKIT_ROOM.number,RoomType.SHOP_ROOM.number};
-    public Level0(int height, int width, DiscreteCoordinates startRoomCoords) {
-        super(false,null,roomDistribution, 5,5);
+    public Level0(boolean random) {
+        super(random,new DiscreteCoordinates(1,0), roomDistribution, 5, 5);
+    }
+    public Level0(){
+        super(true,null,roomDistribution,0,0);
     }
 
     @Override
     protected void generateFixedMap() {
-        generateTestMap();
+        generateFinalMap();
     }
 
     @Override
     protected void generateRandomMap(MapState[][] roomsPlacement) {
         List<DiscreteCoordinates> roomsCoords = new ArrayList<>();
+        DiscreteCoordinates bossRoomCoords = null;
         List<Integer> indexList = new ArrayList<>();
 
         for (int i = 0; i < mapStates.length; i++) {
-            for (int j = 0; j < mapStates[0].length; j++) {
+            for (int j = 0; j < mapStates.length; j++) {
                 if (mapStates[i][j].equals(MapState.EXPLORED) || mapStates[i][j].equals(MapState.PLACED)) {
                     roomsCoords.add(new DiscreteCoordinates(i,j));
+                }
+                if (mapStates[i][j].equals(MapState.BOSS_ROOM)) {
+                    bossRoomCoords = new DiscreteCoordinates(i,j);
                 }
             }
         }
@@ -42,8 +47,12 @@ public class Level0 extends Level {
             indexList.add(i);
         }
 
+
         for (int i = 0; i < roomDistribution.length; i++) {
             List<Integer> index = RandomHelper.chooseKInList(roomDistribution[i], indexList);
+            for (Integer Int: index) {
+                indexList.remove(Int);
+            }
             for (int j : index) {
                 switch (i) {
                     case 0 -> setRoom(roomsCoords.get(j), new Level0TurretRoom(roomsCoords.get(j)));
@@ -54,20 +63,27 @@ public class Level0 extends Level {
                     case 5 -> setRoom(roomsCoords.get(j), new Level0MedKitRoom(roomsCoords.get(j)));
                     case 6 -> setRoom(roomsCoords.get(j), new Level0ShopRoom(roomsCoords.get(j)));
                 }
-                mapStates[roomsCoords.get(j).x][roomsCoords.get(j).x] = MapState.CREATED;
+                if (i == 4){
+                    roomSpawnCoords = new DiscreteCoordinates(roomsCoords.get(j).x,roomsCoords.get(j).y);
+                }
+                mapStates[roomsCoords.get(j).x][roomsCoords.get(j).y] = MapState.CREATED;
+            }
+        }
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map.length; j++) {
+                if(mapStates[i][j].equals(MapState.CREATED)){
+                    setUpConnector(roomsPlacement,super.map[i][j]);
+                }
+                if(mapStates[i][j].equals(MapState.BOSS_ROOM)){
+                    setRoom(bossRoomCoords, new Level0FlameSkullRoom(bossRoomCoords));
+                    setUpConnector(roomsPlacement,super.map[bossRoomCoords.x][bossRoomCoords.y],BOSS_KEY_ID);
+                }
             }
         }
     }
 
-    @Override
-    protected void setUpConnector(MapState[][] roomsPlacement, ICRogueRoom room) {
-        for (int i = 0; i < roomsPlacement.length; i++) {
-            for (int j = 0; j < roomsPlacement[0].length; j++) {
-                if (roomsPlacement[i][j].equals(MapState.CREATED)){
-
-                }
-            }
-        }
+    public String getStartRoomName(){
+        return "icrogue/level0"+roomSpawnCoords.x+roomSpawnCoords.y;
     }
 
     protected enum RoomType{
@@ -84,6 +100,11 @@ public class Level0 extends Level {
             this.number = number;
         }
 
+    }
+
+    @Override
+    public String toString() {
+        return "icrogue/level0";
     }
 
     private void generateTestMap(){

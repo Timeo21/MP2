@@ -1,9 +1,7 @@
 package ch.epfl.cs107.play.game.icrogue;
 
-import ch.epfl.cs107.play.game.actor.TextGraphics;
 import ch.epfl.cs107.play.game.areagame.AreaGame;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
-import ch.epfl.cs107.play.game.icrogue.actor.ICRogueActor;
 import ch.epfl.cs107.play.game.icrogue.actor.ICRoguePlayer;
 import ch.epfl.cs107.play.game.icrogue.area.ICRogueRoom;
 import ch.epfl.cs107.play.game.icrogue.area.Level;
@@ -47,7 +45,6 @@ public class ICRogue extends AreaGame {
             initLevel();
         }
         if (getCurrentArea().getKeyboard().get(Keyboard.Y).isPressed()){
-            System.out.println("");
         }
         if(level0 != null) level0.update(deltaTime);
         super.update(deltaTime);
@@ -62,9 +59,9 @@ public class ICRogue extends AreaGame {
         player.enterArea(area,coordinates);
          */
 
-        level0 = new Level0(8,8,new DiscreteCoordinates(0,0));
+        level0 = new Level0(true);
         titleMap = level0.addArea(this);
-        ICRogueRoom area = (ICRogueRoom) setCurrentArea("icrogue/level000",true);
+        ICRogueRoom area = (ICRogueRoom) setCurrentArea(level0.getStartRoomName(),true);
         DiscreteCoordinates coordinates = area.getPlayerSpawnPosition();
         player = new ICRoguePlayer(area, Orientation.UP,coordinates,"zelda/player");
         area.visite();

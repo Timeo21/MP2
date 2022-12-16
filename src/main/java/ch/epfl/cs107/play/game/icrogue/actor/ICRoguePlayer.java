@@ -273,7 +273,6 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
                         } else {
                             connector.setStats(Connector.ConnectorStats.CLOSE);
                         }
-                        inventory.remove(key);
                         return;
                     }
                 }
