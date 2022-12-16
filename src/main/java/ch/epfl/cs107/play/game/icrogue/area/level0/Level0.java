@@ -31,7 +31,6 @@ public class Level0 extends Level {
         List<DiscreteCoordinates> roomsCoords = new ArrayList<>();
         DiscreteCoordinates bossRoomCoords = null;
         List<Integer> indexList = new ArrayList<>();
-        printMap(mapStates);
         for (int i = 0; i < mapStates.length; i++) {
             for (int j = 0; j < mapStates.length; j++) {
                 if (mapStates[i][j].equals(MapState.EXPLORED) || mapStates[i][j].equals(MapState.PLACED)) {

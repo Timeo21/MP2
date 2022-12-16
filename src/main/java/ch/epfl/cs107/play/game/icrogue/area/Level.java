@@ -181,7 +181,6 @@ public abstract class Level {
         int roomX = roomCoords.x;
         int roomY = roomCoords.y;
         if(roomsPlacement[roomX][roomY].equals(MapState.CREATED)){
-            System.out.println(roomX);
                     if (roomY+1<height && roomsPlacement[roomX][roomY+1].equals(MapState.CREATED))setRoomConnector(roomCoords,this.toString()+roomX+(roomY+1), Level0Room.Level0Connectors.S);
                     if (roomY>0 && roomsPlacement[roomX][roomY-1].equals(MapState.CREATED))setRoomConnector(roomCoords,this.toString()+roomX+(roomY-1), Level0Room.Level0Connectors.N);
                     if (roomX+1<width && roomsPlacement[roomX+1][roomY].equals(MapState.CREATED))setRoomConnector(roomCoords,this.toString()+(roomX+1)+roomY, Level0Room.Level0Connectors.E);
