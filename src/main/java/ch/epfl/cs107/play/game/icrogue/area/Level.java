@@ -75,26 +75,26 @@ public abstract class Level {
                 for (int j = 0; j < height; j++) {
                     if (mapStates[i][j].equals(MapState.PLACED)){
                         addNewRoom = false;
-                        if (i-1 >= 0){
-                            if(mapStates[i-1][j].equals(MapState.NULL)){
+                        if (i > 0){
+                            if(mapStates[i-1][j].equals(MapState.NULL) && freeSlotsPositions.contains(new DiscreteCoordinates(i-1,j))){
                                 freeSlotsPositions.add(new DiscreteCoordinates(i-1,j));
                                 addNewRoom = true;
                             }
                         }
-                        if (i+1 <= height){
-                            if(mapStates[i+1][j].equals(MapState.NULL)){
+                        if (i+1 < height){
+                            if(mapStates[i+1][j].equals(MapState.NULL) && !freeSlotsPositions.contains(new DiscreteCoordinates(i+1,j))){
                                 freeSlotsPositions.add(new DiscreteCoordinates(i+1,j));
                                 addNewRoom = true;
                             }
                         }
-                        if (j-1 >= 0){
-                            if(mapStates[i][j-1].equals(MapState.NULL)){
+                        if (j > 0){
+                            if(mapStates[i][j-1].equals(MapState.NULL) && !freeSlotsPositions.contains(new DiscreteCoordinates(i,j-1))){
                                 freeSlotsPositions.add(new DiscreteCoordinates(i,j-1));
                                 addNewRoom = true;
                             }
                         }
-                        if (j+1 <= width){
-                            if(mapStates[i][j+1].equals(MapState.NULL)){
+                        if (j+1 < width){
+                            if(mapStates[i][j+1].equals(MapState.NULL) && !freeSlotsPositions.contains(new DiscreteCoordinates(i,j+1))){
                                 freeSlotsPositions.add(new DiscreteCoordinates(i,j+1));
                                 addNewRoom = true;
                             }
@@ -107,7 +107,6 @@ public abstract class Level {
                 }
             }
             if (addNewRoom){
-
                 // (b)
                 int toPlaceNow = RandomHelper.roomGenerator.nextInt(0, Math.min(roomsToPlace, freeSlotsPositions.size()))+1;
                 // (c)
@@ -125,22 +124,22 @@ public abstract class Level {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 if (mapStates[i][j].equals(MapState.EXPLORED)){
-                    if (i-1 >= 0){
+                    if (i > 0){
                         if(mapStates[i-1][j].equals(MapState.NULL)){
                             freeSlotsPositions.add(new DiscreteCoordinates(i-1,j));
                         }
                     }
-                    if (i+1 <= height){
+                    if (i+1 < height){
                         if(mapStates[i+1][j].equals(MapState.NULL)){
                             freeSlotsPositions.add(new DiscreteCoordinates(i+1,j));
                         }
                     }
-                    if (j-1 >= 0){
+                    if (j > 0){
                         if(mapStates[i][j-1].equals(MapState.NULL)){
                             freeSlotsPositions.add(new DiscreteCoordinates(i,j-1));
                         }
                     }
-                    if (j+1 <= width){
+                    if (j+1 < width){
                         if(mapStates[i][j+1].equals(MapState.NULL)){
                             freeSlotsPositions.add(new DiscreteCoordinates(i,j+1));
                         }
@@ -151,7 +150,6 @@ public abstract class Level {
         roomToAdd = RandomHelper.roomGenerator.nextInt(0, freeSlotsPositions.size());
         mapStates[freeSlotsPositions.get(roomToAdd).x][freeSlotsPositions.get(roomToAdd).y] = MapState.BOSS_ROOM;
         bossRoomCoordinate = freeSlotsPositions.get(roomToAdd);
-
         return mapStates;
     }
     protected void setUpConnector(MapState[][] roomsPlacement, ICRogueRoom room, int keyID){
@@ -159,19 +157,19 @@ public abstract class Level {
         int roomX = roomCoords.x;
         int roomY = roomCoords.y;
         if(roomsPlacement[roomX][roomY].equals(MapState.BOSS_ROOM)){
-            if (roomsPlacement[roomX+1][roomY].equals(MapState.CREATED)){
+            if (roomX+1<width && roomsPlacement[roomX+1][roomY].equals(MapState.CREATED)){
                 lockRoomConnector(roomCoords.jump(Orientation.RIGHT.toVector()),Level0Room.Level0Connectors.W,keyID);
                 setRoomConnectorDestination(roomCoords.jump(Orientation.RIGHT.toVector()),this.toString()+roomX+roomY, Level0Room.Level0Connectors.W);
             }
-            if (roomsPlacement[roomX-1][roomY].equals(MapState.CREATED)){
+            if (roomX>0 && roomsPlacement[roomX-1][roomY].equals(MapState.CREATED)){
                 lockRoomConnector(roomCoords.jump(Orientation.LEFT.toVector()),Level0Room.Level0Connectors.E,keyID);
                 setRoomConnectorDestination(roomCoords.jump(Orientation.LEFT.toVector()),this.toString()+roomX+roomY, Level0Room.Level0Connectors.E);
             }
-            if (roomsPlacement[roomX][roomY-1].equals(MapState.CREATED)){
+            if (roomY>0 && roomsPlacement[roomX][roomY-1].equals(MapState.CREATED)){
                 lockRoomConnector(roomCoords.jump(Orientation.DOWN.toVector()),Level0Room.Level0Connectors.N,keyID);
                 setRoomConnectorDestination(roomCoords.jump(Orientation.DOWN.toVector()),this.toString()+roomX+roomY, Level0Room.Level0Connectors.N);
             }
-            if (roomsPlacement[roomX][roomY+1].equals(MapState.CREATED)){
+            if (roomY+1<height && roomsPlacement[roomX][roomY+1].equals(MapState.CREATED)){
                 lockRoomConnector(roomCoords.jump(Orientation.UP.toVector()),Level0Room.Level0Connectors.S,keyID);
                 setRoomConnectorDestination(roomCoords.jump(Orientation.UP.toVector()),this.toString()+roomX+roomY, Level0Room.Level0Connectors.S);
             }
@@ -183,10 +181,11 @@ public abstract class Level {
         int roomX = roomCoords.x;
         int roomY = roomCoords.y;
         if(roomsPlacement[roomX][roomY].equals(MapState.CREATED)){
-                    if (roomsPlacement[roomX][roomY+1].equals(MapState.CREATED))setRoomConnector(roomCoords,this.toString()+roomX+(roomY+1), Level0Room.Level0Connectors.S);
-                    if (roomsPlacement[roomX][roomY-1].equals(MapState.CREATED))setRoomConnector(roomCoords,this.toString()+roomX+(roomY-1), Level0Room.Level0Connectors.N);
-                    if (roomsPlacement[roomX+1][roomY].equals(MapState.CREATED))setRoomConnector(roomCoords,this.toString()+(roomX+1)+roomY, Level0Room.Level0Connectors.E);
-                    if (roomsPlacement[roomX-1][roomY].equals(MapState.CREATED))setRoomConnector(roomCoords,this.toString()+(roomX-1)+roomY, Level0Room.Level0Connectors.W);
+            System.out.println(roomX);
+                    if (roomY+1<height && roomsPlacement[roomX][roomY+1].equals(MapState.CREATED))setRoomConnector(roomCoords,this.toString()+roomX+(roomY+1), Level0Room.Level0Connectors.S);
+                    if (roomY>0 && roomsPlacement[roomX][roomY-1].equals(MapState.CREATED))setRoomConnector(roomCoords,this.toString()+roomX+(roomY-1), Level0Room.Level0Connectors.N);
+                    if (roomX+1<width && roomsPlacement[roomX+1][roomY].equals(MapState.CREATED))setRoomConnector(roomCoords,this.toString()+(roomX+1)+roomY, Level0Room.Level0Connectors.E);
+                    if (roomX>0 && roomsPlacement[roomX-1][roomY].equals(MapState.CREATED))setRoomConnector(roomCoords,this.toString()+(roomX-1)+roomY, Level0Room.Level0Connectors.W);
         }
     }
 
