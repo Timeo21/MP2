@@ -22,6 +22,11 @@ public class ICRogueBehavior extends AreaBehavior {
             this.isWalkable = isWalkable;
         }
 
+        /**
+         * Get the type of CellType from an int
+         * @param type (int) : int to get type from
+         * @return (ICRogueCellType) : Type of CellType
+         */
         public static ICRogueCellType toType(int type){
             for(ICRogueCellType icRogueCellType : ICRogueCellType.values()){
                 if(icRogueCellType.type == type)
@@ -107,6 +112,10 @@ public class ICRogueBehavior extends AreaBehavior {
             ((ICRogueInteractionHandler) v).interactWith(this,isCellInteraction);
         }
 
+        /**
+         * Get the cell type
+         * @return (ICRogueCellType) : Type of the cell
+         */
         public ICRogueCellType getCellType(){
             return this.type;
         }

@@ -20,9 +20,17 @@ public abstract class Level0ItemRoom extends Level0Room{
         super.update(deltaTime);
     }
 
+    /**
+     * Add an item to the item list of the room
+     * @param item (Item) : Item to add
+     */
     protected void addItem(Item item){
         items.add(item);
     }
+
+    /**
+     * Check if the room is complete
+     */
     public void checkCompletion(){
         if (logic.isOff()){
             List<Item> itemsCopy = new ArrayList<>(items);

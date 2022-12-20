@@ -17,10 +17,14 @@ public class Key extends Item {
     public Key(Area area, Orientation orientation, DiscreteCoordinates position, int id) {
         super(area, orientation, position);
         this.id = id;
-        sprite = new Sprite("icrogue/key", 0.6f, 0.6f, this);
+        sprite = new Sprite("custom/key", 0.6f, 0.6f, this);
         area.registerActor(this);
     }
 
+    /**
+     *
+     * @return (int) : The id of the key
+     */
     public int getId(){
         return id;
     }

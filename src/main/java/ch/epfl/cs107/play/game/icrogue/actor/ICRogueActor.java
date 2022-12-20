@@ -12,12 +12,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class ICRogueActor extends MovableAreaEntity {
-
-    private Area area;
     public boolean isDead;
     public int life;
-    private Orientation orientation;
-    private DiscreteCoordinates coordinates;
 
     public ICRogueActor(Area area, Orientation orientation, DiscreteCoordinates position) {
         super(area, orientation, position);
@@ -49,22 +45,38 @@ public class ICRogueActor extends MovableAreaEntity {
 
     }
 
+    /**
+     * Manage interaction between Actor and interactable
+     * @param other (Interactable) : Interactable the interactor interact with
+     * @param isCellInteraction (boolean) : the interactable and interactor are on the same cell
+     */
     public void interactWith(Interactable other, boolean isCellInteraction) {
     }
 
     @Override
     public void draw(Canvas canvas) {
     }
+
+    /**
+     * Make actor lose a certain amount of life
+     * @param damage (int) : amount of damage done to the target
+     */
     public void takeDamage(int damage){
         life = life - damage;
         if (life <= 0) die();
     }
+
+    /**
+     * Make the actor dead and remove it
+     */
     public void die(){
         isDead = true;
         leaveArea();
     }
 
-
+    /**
+     * Remove the actor from the area
+     */
     public void leaveArea(){
         getOwnerArea().unregisterActor(this);
     }

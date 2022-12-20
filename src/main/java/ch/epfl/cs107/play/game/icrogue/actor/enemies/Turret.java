@@ -35,6 +35,10 @@ public class Turret extends ICRogueActor {
         return true;
     }
 
+    @Override
+    public boolean isViewInteractable() {
+        return true;
+    }
 
     @Override
     public void acceptInteraction(AreaInteractionVisitor v, boolean isCellInteraction) {

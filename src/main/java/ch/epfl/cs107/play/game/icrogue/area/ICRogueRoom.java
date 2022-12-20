@@ -57,6 +57,10 @@ public abstract class ICRogueRoom extends Area implements Logic {
         return ICRogue.CAMERA_SCALE_FACTOR;
     }
 
+    /**
+     * Get the player spawn position
+     * @return (Coordinate) : Coordinate of spawn in the starting room
+     */
     public abstract DiscreteCoordinates getPlayerSpawnPosition();
 
     @Override
@@ -72,43 +76,44 @@ public abstract class ICRogueRoom extends Area implements Logic {
 
     @Override
     public void update(float deltaTime) {
-        Keyboard keyboard = this.getKeyboard();
-
-        if (keyboard.get(Keyboard.O).isPressed()) cheatIfPressed(1);
-        if (keyboard.get(Keyboard.L).isPressed()) cheatIfPressed(2);
-        if (keyboard.get(Keyboard.T).isPressed()) cheatIfPressed(3);
         if (!isDoorsOpen && logic.isOn()){
             for (Connector connector: connectors){
                 connector.openDoor();
                 isDoorsOpen = true;
             }
         }
-
         super.update(deltaTime);
     }
 
+    /**
+     * Set a connector to a close stat
+     * @param connectorIndex (int) : index of the connector to change
+     */
+    public void setCloseConnector(int connectorIndex){
+        connectors.get(connectorIndex).setStats(Connector.ConnectorStats.CLOSE);
+    }
 
-    private void cheatIfPressed(int cheatCode){
-        switch (cheatCode){
-            case 1:
-                for (Connector connector: connectors){
-                    connector.setStats(Connector.ConnectorStats.OPEN);
-                }
-                break;
-            case 2:
-                Connector connector0 = connectors.get(2);
-                connector0.setStats(Connector.ConnectorStats.LOCKED,1);
-                break;
-            case 3:
-                for (Connector connector: connectors){
-                    connector.switchDoor();
-                }
-                break;
-        }
+    /**
+     * Set a connector's destination
+     * @param destination (String) : Name of the destination room
+     * @param connectorIndex (int) : Index of the connector to change
+     */
+    public void setConnectorDestination(String destination,int connectorIndex){
+        connectors.get(connectorIndex).setDestinationAreaName(destination);
     }
-    protected List<Connector> getConnector(){
-        return new ArrayList<>(connectors);
+
+    /**
+     * Set a connector to a locked stat
+     * @param connectorIndex (int) : Index of the connector to change
+     * @param keyID (int) : ID of the key required to open it
+     */
+    public void setLockedConnector(int connectorIndex, int keyID){
+        connectors.get(connectorIndex).setStats(Connector.ConnectorStats.LOCKED,keyID);
     }
+
+    /**
+     * Make room visite by the player
+     */
     public void visite(){
         if (!this.isVisited) {
             this.isVisited = true;

@@ -21,15 +21,18 @@ public class FlameSkull extends ICRogueActor {
     private Animation[] damageAnim;
     private DiscreteCoordinates playerCoords;
     private DiscreteCoordinates currentPosition;
-    private boolean isDamage;
-    private float imunityDuration;
+    public boolean isDamage;
+    private float immunityDuration;
+    private int speed;
+
 
     public FlameSkull(Area area, Orientation orientation, DiscreteCoordinates position) {
         super(area, orientation, position);
         this.area = area;
         this.orientation = orientation;
-        imunityDuration = .7f;
+        immunityDuration = .7f;
         life = 3;
+        speed = 15;
         Sprite[][] animationSprites = Sprite.extractSprites("zelda/flameskull", 3, 1.2f, 1.2f, this, 32, 32,new Vector(-.1f,0),
                 new Orientation[]{Orientation.UP, Orientation.LEFT, Orientation.DOWN, Orientation.RIGHT});
         movingAnim = Animation.createAnimations(5,animationSprites);
@@ -39,11 +42,6 @@ public class FlameSkull extends ICRogueActor {
         area.registerActor(this);
     }
 
-    public void die(){
-        isDead = true;
-        area.unregisterActor(this);
-    }
-
     @Override
     public boolean isCellInteractable() {
         return !isDead;
@@ -51,7 +49,7 @@ public class FlameSkull extends ICRogueActor {
 
     @Override
     public boolean isViewInteractable() {
-        return false;
+        return true;
     }
 
     @Override
@@ -61,20 +59,27 @@ public class FlameSkull extends ICRogueActor {
 
     @Override
     public void update(float deltaTime) {
-        imunityDuration -= deltaTime;
-        if (imunityDuration < 0) {
+        immunityDuration -= deltaTime;
+        if (immunityDuration < 0) {
             isDamage = false;
-            imunityDuration = .7f;
+            immunityDuration = .7f;
         }
         currentPosition = getCurrentMainCellCoordinates();
         for (Animation animation : movingAnim) animation.update(deltaTime);
         for (Animation animation : damageAnim) animation.update(deltaTime);
         playerCoords = ICRogue.getPlayerCoords();
-        followPlayer();
+        if (isDamage){
+            move(2);
+        } else {
+            followPlayer();
+        }
 
         super.update(deltaTime);
     }
 
+    /**
+     * Make the skullflame go to player coordinate to follow him
+     */
     private void followPlayer(){
         if (isInDisplacement()) return;
         int random = enemyGenerator.nextInt(2);
@@ -89,28 +94,36 @@ public class FlameSkull extends ICRogueActor {
         }
     }
 
+    /**
+     *  Make the flameskull move on the X-axis to match player's X
+     * @return (boolean): The flameskull has move on X-axis
+     */
     private boolean moveOnX(){
         if (playerCoords.x < currentPosition.x){
             orientation = Orientation.LEFT;
             orientate(orientation);
-            return move(15);
+            return move(speed);
         } else if (playerCoords.x > currentPosition.x) {
             orientation = Orientation.RIGHT;
             orientate(orientation);
-            return move(15);
+            return move(speed);
         }
         return false;
     }
 
+    /**
+     *  Make the flameskull move on the Y-axis to match player's Y
+     * @return (boolean): The flameskull has move on Y-axis
+     */
     private boolean moveOnY(){
         if (playerCoords.y < currentPosition.y){
             orientation = Orientation.DOWN;
             orientate(orientation);
-            return move(15);
+            return move(speed);
         } else if (playerCoords.y > currentPosition.y) {
             orientation = Orientation.UP;
             orientate(orientation);
-            return move(15);
+            return move(speed);
         }
         return false;
     }
@@ -137,6 +150,7 @@ public class FlameSkull extends ICRogueActor {
     @Override
     public void takeDamage(int damage) {
         isDamage = true;
+        speed -= 4;
         super.takeDamage(damage);
     }
 }

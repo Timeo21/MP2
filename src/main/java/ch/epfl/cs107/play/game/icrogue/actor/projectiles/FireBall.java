@@ -99,7 +99,7 @@ public class FireBall extends Projectile implements Consumable, Interactor{
         public void interactWith(Turret turret, boolean isCellInteraction) {
             if (isCellInteraction){
                 turret.die();
-                player.coin++;
+                player.addCoin(1);
                 consume();
             }
         }
@@ -115,7 +115,7 @@ public class FireBall extends Projectile implements Consumable, Interactor{
         @Override
         public void interactWith(FlameSkull flameSkull, boolean isCellInteraction) {
                 flameSkull.takeDamage(1);
-                player.coin += 3;
+                player.addCoin(1);
                 consume();
         }
     }

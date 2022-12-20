@@ -64,9 +64,19 @@ public class Level0Room extends ICRogueRoom {
         public DiscreteCoordinates getDestination() {
             return destination;
         }
+
+        /**
+         * Get orientations of the Connectors
+         * @return (Orientations) : List of the orientations
+         */
         public static List<Orientation> getAllConnectorsOrientation(){
             return orientations;
         }
+
+        /**
+         * Get positions of the connectors
+         * @return (Coordinates) : List of the positions
+         */
         public static List<DiscreteCoordinates> getAllConnectorsPosition(){
             return positions;
         }

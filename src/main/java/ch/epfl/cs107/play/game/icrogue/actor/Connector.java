@@ -39,7 +39,7 @@ public class Connector extends AreaEntity {
         orientation = orientation.opposite();
         sprites[0] = null;
         sprites[1] = new Sprite("icrogue/door_"+orientation.ordinal(),(orientation.ordinal()+1)%2+1, orientation.ordinal()%2+1, this);
-        sprites[2] = new Sprite("icrogue/lockedDoor_"+orientation.ordinal(),(orientation.opposite().ordinal()+1)%2+1, orientation.ordinal()%2+1, this);
+        sprites[2] = new Sprite("custom/lockedBossDoor_"+orientation.ordinal(),(orientation.opposite().ordinal()+1)%2+1, orientation.ordinal()%2+1, this);
         sprites[3] = new Sprite("icrogue/invisibleDoor_"+orientation.ordinal(),(orientation.opposite().ordinal()+1)%2+1, orientation.ordinal()%2+1, this);
     }
 
@@ -70,31 +70,55 @@ public class Connector extends AreaEntity {
         super.update(deltaTime);
     }
 
-    public int getKeyID(){
-        return keyID;
-    }
-    public void setKeyID(int keyID){
-        this.keyID = keyID;
-    }
-
-    public void setDestinationAreaName(String destinationAreaName){
-        this.destinationAreaName = destinationAreaName;
-    }
-
     @Override
     public List<DiscreteCoordinates> getCurrentCells() {
         DiscreteCoordinates coordinates = getCurrentMainCellCoordinates();
         return List.of(coordinates , coordinates.jump(new Vector((getOrientation().ordinal()+1)%2, getOrientation().ordinal()%2)));
     }
+
+    @Override
+    public void acceptInteraction(AreaInteractionVisitor v, boolean isCellInteraction) {
+        ((ICRogueInteractionHandler) v).interactWith(this,isCellInteraction);
+    }
+
+    /**
+     * Get the id of the key required to open the door
+     * @return (int): The id of the key required to open the door
+     */
+    public int getKeyID(){
+        return keyID;
+    }
+
+    /**
+     * Set the destination area of the connector
+     * @param destinationAreaName (String) : name of the area
+     */
+    public void setDestinationAreaName(String destinationAreaName){
+        this.destinationAreaName = destinationAreaName;
+    }
+
+    /**
+     * Set the state of the connector
+     * @param stats (ConnectorStats) : State to set the connector
+     */
     public void setStats(ConnectorStats stats){
             setStats(stats,0);
     }
+
+    /**
+     * Set the state of the connector with the id of the key required ot open it
+     * @param stats (ConnectorStats) : State to set the connector
+     * @param keyID (int) : The id of the key required to open the door
+     */
     public void setStats(ConnectorStats stats,int keyID){
         this.stats = stats;
         this.takeSpace = !stats.equals(ConnectorStats.OPEN);
         this.keyID = keyID;
     }
 
+    /**
+     * Switch between open and close door
+     */
     public void switchDoor(){
         if (stats.equals(ConnectorStats.CLOSE)){
             setStats(ConnectorStats.OPEN);
@@ -103,20 +127,27 @@ public class Connector extends AreaEntity {
         }
     }
 
+    /**
+     * Make connector open
+     */
     public void openDoor(){
         if (stats.equals(ConnectorStats.CLOSE)){
             setStats(ConnectorStats.OPEN);
         }
     }
 
-    @Override
-    public void acceptInteraction(AreaInteractionVisitor v, boolean isCellInteraction) {
-        ((ICRogueInteractionHandler) v).interactWith(this,isCellInteraction);
-    }
+    /**
+     * Get the Coordinate in the destination's room
+     * @return (DiscreteCoordinates) : The Coordinate of destination in the destination's room
+     */
     public DiscreteCoordinates getDestinationCoordinates(){
         return new DiscreteCoordinates(destinationCoordinates.x,destinationCoordinates.y);
     }
 
+    /**
+     * Get the coordinate of the destination's room
+     * @return (DiscreteCoordinates) : The coordination of the room of destination
+     */
     public DiscreteCoordinates getDestinationRoomCoords(){
         return new DiscreteCoordinates(Integer.parseInt(String.valueOf(destinationAreaName.charAt(14))),Integer.parseInt(String.valueOf(destinationAreaName.charAt(15))));
     }

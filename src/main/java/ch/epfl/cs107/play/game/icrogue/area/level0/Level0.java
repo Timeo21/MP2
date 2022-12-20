@@ -45,6 +45,9 @@ public class Level0 extends Level {
         for (int i = 0; i < roomsCoords.size(); i++) {
             indexList.add(i);
         }
+        System.out.println("rommsCoords size: "+roomsCoords.size());
+        System.out.println("index size: "+indexList.size());
+        System.out.println(Arrays.toString(roomDistribution));
 
 
         for (int i = 0; i < roomDistribution.length; i++) {
@@ -70,17 +73,21 @@ public class Level0 extends Level {
         }
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map.length; j++) {
-                if(mapStates[i][j].equals(MapState.CREATED)){
-                    setUpConnector(roomsPlacement,super.map[i][j]);
-                }
                 if(mapStates[i][j].equals(MapState.BOSS_ROOM)){
                     setRoom(bossRoomCoords, new Level0FlameSkullRoom(bossRoomCoords));
                     setUpConnector(roomsPlacement,super.map[bossRoomCoords.x][bossRoomCoords.y],BOSS_KEY_ID);
+                }
+                if(mapStates[i][j].equals(MapState.CREATED) || mapStates[i][j].equals(MapState.BOSS_ROOM)){
+                    setUpConnector(roomsPlacement,super.map[i][j]);
                 }
             }
         }
     }
 
+    /**
+     * Get the name of the starting room
+     * @return (String) : Name of the starting room
+     */
     public String getStartRoomName(){
         return "icrogue/level0"+roomSpawnCoords.x+roomSpawnCoords.y;
     }
@@ -106,6 +113,9 @@ public class Level0 extends Level {
         return "icrogue/level0";
     }
 
+    /**
+     * Generate a fixed map
+     */
     private void generateTestMap(){
         DiscreteCoordinates room00 = new DiscreteCoordinates(0, 0);
         setRoom(room00, new Level0Room(room00));
@@ -157,6 +167,9 @@ public class Level0 extends Level {
 
     }
 
+    /**
+     * Generate a fixed map
+     */
     private void generateFinalMap() {
         DiscreteCoordinates room00 = new DiscreteCoordinates(0, 0);
         setRoom(room00, new Level0TurretRoom(room00));
@@ -188,6 +201,10 @@ public class Level0 extends Level {
         setRoom (room11, new Level0ShopRoom(room11));
         setRoomConnector(room11, "icrogue/level010", Level0Room.Level0Connectors.N);
     }
+
+    /**
+     * Generate a fixed map
+     */
     public void generateLevel(){
         DiscreteCoordinates room00 = new DiscreteCoordinates(0,0);
         setRoom(room00, new Level0TurretRoom(room00,Arrays.asList(new DiscreteCoordinates(4,4),new DiscreteCoordinates(5,5))));

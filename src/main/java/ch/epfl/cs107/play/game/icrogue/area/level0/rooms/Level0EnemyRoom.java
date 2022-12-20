@@ -21,10 +21,17 @@ public abstract class Level0EnemyRoom extends Level0Room{
         super.update(deltaTime);
     }
 
+    /**
+     * Add the enemy to the enemies list of the room
+     * @param enemy (ICRogueActor) : Enemy to add
+     */
     protected void addEnemy(ICRogueActor enemy){
         enemies.add(enemy);
     }
 
+    /**
+     * Check if the room is complete
+     */
     public void checkCompletion(){
         if (logic.isOff()){
             List<ICRogueActor> enemiesCopy = new ArrayList<>(enemies);

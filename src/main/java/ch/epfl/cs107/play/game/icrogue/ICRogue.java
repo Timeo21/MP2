@@ -38,8 +38,8 @@ public class ICRogue extends AreaGame {
             System.out.println("Game Over");
             initLevel();
         }
-        if (player.isChangingRoom){
-            switchRoom(player.switchRoomInfo[0]);
+        if (player.isChangingRoom()){
+            switchRoom(player.getSwitchRoomInfo()[0]);
         }
         if (getCurrentArea().getKeyboard().get(Keyboard.R).isPressed()){
             initLevel();
@@ -50,14 +50,12 @@ public class ICRogue extends AreaGame {
         super.update(deltaTime);
     }
 
+    /**
+     * Initialize the first level
+     * Create the player
+     * Start the game
+     */
     private void initLevel(){
-        /*
-        addArea(new Level0Room(new DiscreteCoordinates(0,0)));
-        ICRogueRoom area = (ICRogueRoom)setCurrentArea("icrogue/level000",true);
-        DiscreteCoordinates coordinates = area.getPlayerSpawnPosition();
-        player = new ICRoguePlayer(area, Orientation.UP,coordinates,"zelda/player");
-        player.enterArea(area,coordinates);
-         */
 
         level0 = new Level0(true);
         titleMap = level0.addArea(this);
@@ -68,12 +66,16 @@ public class ICRogue extends AreaGame {
         player.enterArea(area,coordinates);
     }
 
+    /**
+     * Make the player change room
+     * @param newRoomCoords (Coordinate) : Coordinate of the destination room
+     */
     public void switchRoom(DiscreteCoordinates newRoomCoords){
         player.leaveArea();
         ICRogueRoom area = (ICRogueRoom) setCurrentArea(titleMap[newRoomCoords.x][newRoomCoords.y],false);
-        player.enterArea(area,player.switchRoomInfo[1]);
+        player.enterArea(area,player.getSwitchRoomInfo()[1]);
         area.visite();
-        player.isChangingRoom = false;
+        player.changingRoom(false);
     }
 
     @Override
@@ -81,6 +83,10 @@ public class ICRogue extends AreaGame {
         return "ICRogue";
     }
 
+    /**
+     * Get the coordinate of the player
+     * @return (Coordinate) : Coordinate of the player
+     */
     public static DiscreteCoordinates getPlayerCoords(){
         return player.getCoords();
     }
