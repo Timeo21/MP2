@@ -20,6 +20,8 @@ public abstract class Projectile extends ICRogueActor implements Interactor {
 
     public Projectile(Area area, Orientation orientation, DiscreteCoordinates coordinates, int frame, int damage) {
         super(area, orientation, coordinates);
+        this.frame = frame;
+        this.damage = damage;
     }
     public Projectile(Area area, Orientation orientation, DiscreteCoordinates coordinates){
         this(area,orientation,coordinates,DEFAULT_MOVE_DURATION, DEFAULT_DAMAGE);
@@ -55,5 +57,11 @@ public abstract class Projectile extends ICRogueActor implements Interactor {
         area.registerActor(this);
         setOwnerArea(area);
         setCurrentPosition(coordinates.toVector());
+    }
+    protected int getFrame(){
+        return frame;
+    }
+    public int getDamage(){
+        return damage;
     }
 }

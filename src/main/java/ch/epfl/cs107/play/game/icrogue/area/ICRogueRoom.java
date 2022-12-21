@@ -38,6 +38,10 @@ public abstract class ICRogueRoom extends Area implements Logic {
         connectors.add(new Connector(this, positions.get(2),orientations.get(2), Connector.ConnectorStats.INVISIBLE,"", Level0Room.Level0Connectors.E.getDestination()));
         connectors.add(new Connector(this, positions.get(3),orientations.get(3), Connector.ConnectorStats.INVISIBLE,"", Level0Room.Level0Connectors.N.getDestination()));
     }
+
+    /**
+     * Register all elements of the room
+     */
     protected void createArea(){
         for (Connector connector : connectors) {
             registerActor(connector);
@@ -118,6 +122,15 @@ public abstract class ICRogueRoom extends Area implements Logic {
         if (!this.isVisited) {
             this.isVisited = true;
         }
+    }
+
+    protected int connectorIndex(){
+        for(Connector connector : connectors){
+            if(!connector.isWall()){
+                return connectors.indexOf(connector);
+            }
+        }
+        return -1;
     }
 
     @Override

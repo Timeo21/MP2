@@ -30,7 +30,7 @@ public class FlameSkull extends ICRogueActor {
         super(area, orientation, position);
         this.area = area;
         this.orientation = orientation;
-        immunityDuration = .7f;
+        immunityDuration = 1f;
         life = 3;
         speed = 15;
         Sprite[][] animationSprites = Sprite.extractSprites("zelda/flameskull", 3, 1.2f, 1.2f, this, 32, 32,new Vector(-.1f,0),
@@ -49,7 +49,7 @@ public class FlameSkull extends ICRogueActor {
 
     @Override
     public boolean isViewInteractable() {
-        return true;
+        return !isDead;
     }
 
     @Override
@@ -62,18 +62,15 @@ public class FlameSkull extends ICRogueActor {
         immunityDuration -= deltaTime;
         if (immunityDuration < 0) {
             isDamage = false;
-            immunityDuration = .7f;
+            immunityDuration = 1f;
         }
         currentPosition = getCurrentMainCellCoordinates();
         for (Animation animation : movingAnim) animation.update(deltaTime);
         for (Animation animation : damageAnim) animation.update(deltaTime);
         playerCoords = ICRogue.getPlayerCoords();
-        if (isDamage){
-            move(2);
-        } else {
+        if (!isDamage){
             followPlayer();
         }
-
         super.update(deltaTime);
     }
 
@@ -131,26 +128,18 @@ public class FlameSkull extends ICRogueActor {
     @Override
     public void draw(Canvas canvas) {
         if(isDamage){
-            switch (orientation){
-                case UP -> damageAnim[0].draw(canvas);
-                case RIGHT -> damageAnim[1].draw(canvas);
-                case DOWN -> damageAnim[2].draw(canvas);
-                case LEFT -> damageAnim[3].draw(canvas);
-            }
+            damageAnim[orientation.ordinal()].draw(canvas);
         } else {
-            switch (orientation){
-                case UP -> movingAnim[0].draw(canvas);
-                case RIGHT -> movingAnim[1].draw(canvas);
-                case DOWN -> movingAnim[2].draw(canvas);
-                case LEFT -> movingAnim[3].draw(canvas);
-            }
+            movingAnim[orientation.ordinal()].draw(canvas);
         }
     }
 
     @Override
     public void takeDamage(int damage) {
-        isDamage = true;
-        speed -= 4;
-        super.takeDamage(damage);
+        if(!isDamage){
+            isDamage = true;
+            speed -= 3;
+            super.takeDamage(damage);
+        }
     }
 }

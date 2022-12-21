@@ -62,4 +62,7 @@ public class Turret extends ICRogueActor {
         animations[0].draw(canvas);
     }
 
+    public DiscreteCoordinates getCoords(){
+        return getCurrentMainCellCoordinates();
+    }
 }

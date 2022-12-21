@@ -7,6 +7,7 @@ import ch.epfl.cs107.play.game.icrogue.ICRogueBehavior;
 import ch.epfl.cs107.play.game.icrogue.actor.Connector;
 import ch.epfl.cs107.play.game.icrogue.actor.ICRogueActor;
 import ch.epfl.cs107.play.game.icrogue.actor.ICRoguePlayer;
+import ch.epfl.cs107.play.game.icrogue.actor.enemies.DarkLord;
 import ch.epfl.cs107.play.game.icrogue.actor.enemies.FlameSkull;
 import ch.epfl.cs107.play.game.icrogue.actor.enemies.Turret;
 import ch.epfl.cs107.play.game.icrogue.handler.ICRogueInteractionHandler;
@@ -27,8 +28,8 @@ public class FireBall extends Projectile implements Consumable, Interactor{
     private DiscreteCoordinates coordinates;
     private boolean isConsumed;
     private ICRoguePlayer player;
-    public FireBall(Area area, Orientation orientation, DiscreteCoordinates position, ICRoguePlayer player) {
-        super(area, orientation, position, 5, 1);
+    public FireBall(Area area, Orientation orientation, DiscreteCoordinates position, ICRoguePlayer player,int frame) {
+        super(area, orientation, position, frame, 1);
 
 
         sprites = Sprite.extractSprites("zelda/fire",7, 1f, 1f, this , 16, 16,
@@ -48,7 +49,7 @@ public class FireBall extends Projectile implements Consumable, Interactor{
     public void update(float deltaTime) {
         if (!isConsumed){
             animations[2].update(deltaTime);
-            move(5);
+            move(getFrame());
         }
         super.update(deltaTime);
     }
@@ -97,6 +98,7 @@ public class FireBall extends Projectile implements Consumable, Interactor{
     private class FireBallInteractionHandler implements ICRogueInteractionHandler{
         @Override
         public void interactWith(Turret turret, boolean isCellInteraction) {
+            if(FireBall.this.player == null) return;
             if (isCellInteraction){
                 turret.die();
                 player.addCoin(1);
@@ -117,6 +119,28 @@ public class FireBall extends Projectile implements Consumable, Interactor{
                 flameSkull.takeDamage(1);
                 player.addCoin(1);
                 consume();
+        }
+
+        @Override
+        public void interactWith(ICRoguePlayer player, boolean isCellInteraction) {
+            if (FireBall.this.player == null){
+                player.takeDamage(1);
+                consume();
+            }
+        }
+
+        @Override
+        public void interactWith(DarkLord darkLord, boolean isCellInteraction) {
+            FireBall fireBall = FireBall.this;
+            if (fireBall.player == null) return;
+            if (darkLord.isShielding()){
+                fireBall.player = null;
+                resetMotion();
+                fireBall.orientate(orientation.opposite());
+            } else {
+                darkLord.takeDamage(1);
+                consume();
+            }
         }
     }
 }

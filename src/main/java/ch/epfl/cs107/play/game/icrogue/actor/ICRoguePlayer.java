@@ -33,11 +33,14 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
     private final List<Key> inventory = new ArrayList<>();
     private final static int MOVE_DURATION = 8;
     private boolean fireBalling;
+    private boolean isDamage;
     private boolean hasStaff;
     private boolean attacking;
     private int coin;
     private float speedBonus = 1;
     private final static float COOLDOWN = .5f;
+    private float immunityTime;
+    private final static float IMMUNITY_DURA = .5f;
     private float fireBallCooldown;
     private Sprite[] idleSprites = new Sprite[4];
     private Orientation orientation;
@@ -45,6 +48,7 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
     private Sprite[][] lifeSprite;
     private Sprite coinSprite;
     private boolean itemInteraction;
+    private boolean canAttack;
 
     private DiscreteCoordinates[] switchRoomInfo = new DiscreteCoordinates[2];
     private boolean isChangingRoom = false;
@@ -122,6 +126,7 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
 
     @Override
     public void update(float deltaTime) {
+        canAttack = !fireBalling && !attacking;
         if (coin > 9) {
             coinText.setText("9+");
             coinText.setAnchor(new Vector(9.35f, 0.37f));
@@ -142,21 +147,19 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
                 fireBallCooldown += deltaTime;
             }
         }
+        immunityTime += deltaTime;
+        if (isDamage && immunityTime > IMMUNITY_DURA){
+            isDamage = false;
+        }
 
         if(attacking){
             if (swordAnimations[orientation.ordinal()].isCompleted()){
                 attacking = false;
             }
         }
-        for (Animation animation : walkAnimations) {
-            animation.update(deltaTime);
-        }
-        for (Animation animation : staffAnimations) {
-            animation.update(deltaTime);
-        }
-        for (Animation animation : swordAnimations) {
-            animation.update(deltaTime);
-        }
+        for (Animation animation : walkAnimations) animation.update(deltaTime);
+        for (Animation animation : staffAnimations) animation.update(deltaTime);
+        for (Animation animation : swordAnimations) animation.update(deltaTime);
         itemInteraction = getOwnerArea().getKeyboard().get(Keyboard.W).isPressed();
         Keyboard keyboard= getOwnerArea().getKeyboard();
         moveIfPressed(Orientation.LEFT, keyboard.get(Keyboard.LEFT));
@@ -190,7 +193,7 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
      * @param button (Button) : button corresponding to attacking
      */
     private void attackIfPressed(Button button){
-        if(button.isPressed() && !fireBalling && !attacking){
+        if(button.isPressed() && canAttack){
             swordAnimations[orientation.ordinal()].reset();
             attacking = true;
         }
@@ -202,12 +205,12 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
      */
     private void fireBallIfPressed(Button button){
         // Press X key, has the staff and is not on cooldown
-        if(button.isPressed() && hasStaff && !fireBalling && !attacking){
+        if(button.isPressed() && hasStaff && canAttack){
             fireBalling = true;
             //if moving spawning the fireball on case forward to avoid setting his back on fire
             if (isInDisplacement()){
-                new FireBall(getOwnerArea(),orientation,getCurrentMainCellCoordinates().jump(orientation.toVector()),this);
-            } else new FireBall(getOwnerArea(),orientation,getCurrentMainCellCoordinates(),this);
+                new FireBall(getOwnerArea(),orientation,getCurrentMainCellCoordinates().jump(orientation.toVector()),this,5);
+            } else new FireBall(getOwnerArea(),orientation,getCurrentMainCellCoordinates(),this,5);
         }
     }
     @Override
@@ -314,6 +317,15 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
      */
     public void addCoin(int coin){
         this.coin += coin;
+    }
+
+    @Override
+    public void takeDamage(int damage) {
+        if (!isDamage){
+            super.takeDamage(damage);
+            immunityTime = 0;
+            isDamage = true;
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package ch.epfl.cs107.play.game.icrogue.area.level0;
 
 import ch.epfl.cs107.play.game.icrogue.RandomHelper;
+import ch.epfl.cs107.play.game.icrogue.area.ICRogueRoom;
 import ch.epfl.cs107.play.game.icrogue.area.Level;
 import ch.epfl.cs107.play.game.icrogue.area.level0.rooms.*;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
@@ -45,9 +46,6 @@ public class Level0 extends Level {
         for (int i = 0; i < roomsCoords.size(); i++) {
             indexList.add(i);
         }
-        System.out.println("rommsCoords size: "+roomsCoords.size());
-        System.out.println("index size: "+indexList.size());
-        System.out.println(Arrays.toString(roomDistribution));
 
 
         for (int i = 0; i < roomDistribution.length; i++) {
@@ -74,7 +72,8 @@ public class Level0 extends Level {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map.length; j++) {
                 if(mapStates[i][j].equals(MapState.BOSS_ROOM)){
-                    setRoom(bossRoomCoords, new Level0FlameSkullRoom(bossRoomCoords));
+                    Level0BossRoom bossRoom = new Level0BossRoom(bossRoomCoords);
+                    setRoom(bossRoomCoords, bossRoom);
                     setUpConnector(roomsPlacement,super.map[bossRoomCoords.x][bossRoomCoords.y],BOSS_KEY_ID);
                 }
                 if(mapStates[i][j].equals(MapState.CREATED) || mapStates[i][j].equals(MapState.BOSS_ROOM)){

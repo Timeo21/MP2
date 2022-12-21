@@ -4,6 +4,7 @@ import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.game.icrogue.ICRogueBehavior;
 import ch.epfl.cs107.play.game.icrogue.actor.Connector;
 import ch.epfl.cs107.play.game.icrogue.actor.ICRoguePlayer;
+import ch.epfl.cs107.play.game.icrogue.actor.enemies.DarkLord;
 import ch.epfl.cs107.play.game.icrogue.actor.enemies.FlameSkull;
 import ch.epfl.cs107.play.game.icrogue.actor.enemies.Turret;
 import ch.epfl.cs107.play.game.icrogue.actor.items.Key;
@@ -36,6 +37,8 @@ public interface ICRogueInteractionHandler extends AreaInteractionVisitor {
     default void interactWith(SpeedShoes speedShoes, boolean isCellInteraction){
     }
     default void interactWith(MedKit medKit, boolean isCellInteraction){
+    }
+    default void interactWith(DarkLord darkLord, boolean isCellInteraction){
     }
 
 }

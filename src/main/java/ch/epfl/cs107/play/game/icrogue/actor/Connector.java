@@ -151,4 +151,7 @@ public class Connector extends AreaEntity {
     public DiscreteCoordinates getDestinationRoomCoords(){
         return new DiscreteCoordinates(Integer.parseInt(String.valueOf(destinationAreaName.charAt(14))),Integer.parseInt(String.valueOf(destinationAreaName.charAt(15))));
     }
+    public boolean isWall(){
+        return stats.equals(ConnectorStats.INVISIBLE);
+    }
 }
