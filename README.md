@@ -17,5 +17,18 @@ Il y a deux armes :\
 L'épée accessible dès le début permettant d'inflliger des dégats au monstre devant le joueur.\
 Le bâton magique offre au joueur la possibilité de tirer une boule de feu dans la direction dans laquelle il regarde.
 ## Enemmis
-
-## Boss
+Il y a trois ennemis différents :
+  #### La tourrelles
+  Tire des lasers dans les quatres directions.\
+  Peut être tué en le tapant avec l'épée, en marchant dessus ou en lançant une boule de feu.
+  #### Le crânes
+  Se deplace en direction du joueur.\
+  Il accélére quand il perd de la vie.\
+  Peut être tué en le tapant avec l'épée ou en tirant une boule de feu
+  #### Le Sorcière des ténébres
+  C'est le boss du niveau.\
+  Il a trois phase :\
+    - Attaque: Il tire des boules de feu en dirrection du joueur.\
+    - Bouclier : Il devient totalement invulnérable.\
+    - Invocation : Il fait apparaître des tourrelles.\
+  Il peut être tué uniquement avec des boules de feu
