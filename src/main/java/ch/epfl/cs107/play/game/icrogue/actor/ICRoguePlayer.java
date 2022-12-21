@@ -34,9 +34,10 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
     private final static int MOVE_DURATION = 8;
     private boolean fireBalling;
     private boolean isDamage;
-    private boolean hasStaff;
+    private boolean hasStaff = true;
     private boolean attacking;
     private int coin;
+    private boolean godMode;
     private float speedBonus = 1;
     private final static float COOLDOWN = .5f;
     private float immunityTime;
@@ -167,6 +168,7 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
         moveIfPressed(Orientation.RIGHT, keyboard.get(Keyboard.RIGHT));
         moveIfPressed(Orientation.DOWN, keyboard.get(Keyboard.DOWN));
         fireBallIfPressed(keyboard.get(Keyboard.X));
+        godMode(keyboard.get(Keyboard.TAB));
         attackIfPressed(keyboard.get(Keyboard.SPACE));
 
         super.update(deltaTime);
@@ -185,6 +187,12 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
                 orientate(orientation);
                 move((int) (MOVE_DURATION/speedBonus));
             }
+        }
+    }
+
+    private void godMode(Button button){
+        if(button.isPressed()){
+            godMode = !godMode;
         }
     }
 
@@ -321,6 +329,7 @@ public class ICRoguePlayer extends ICRogueActor implements Interactor {
 
     @Override
     public void takeDamage(int damage) {
+        if (godMode) return;
         if (!isDamage){
             super.takeDamage(damage);
             immunityTime = 0;
